@@ -2,6 +2,7 @@ import subprocess
 import sys
 import get_pip
 import os
+import velocity
 
 def install(package):
     subprocess.call([sys.executable, "-m", "pip", "install", package])
@@ -76,6 +77,7 @@ time = 0
 rollVel = 0
 strokes = 0
 par = 0
+#OG lvl = 8
 level = 8
 flagx = 0
 coins = 0
@@ -139,7 +141,11 @@ class scoreSheet():
         return sum(self.strokes)
 
     def drawSheet(self, score=0):
+        grey = (220, 220, 220)
+        '''
+        
         self.strokes.append(score)
+        
         grey = (220, 220, 220)
 
         text = self.bigFont.render('Strokes: ' + str(sum(self.strokes)), 1, grey)
@@ -201,7 +207,7 @@ class scoreSheet():
 
             # Draw row lines
             pygame.draw.line(self.win, (0,0,0), (startx, starty + (i * (self.height/10))), (startx + self.width, starty + (i * (self.height / 10))), 2)
-
+'''
 
 def error():
     if SOUND:
@@ -255,6 +261,7 @@ def endScreen(): # Display this screen when the user completes trhe course
         if sheet.getScore() < int(oldscore):
             text = myFont.render('New Best!', 1, (64, 64, 64))
             win.blit(text, (winwidth/2 - text.get_width()/2, 130))
+            
             pygame.display.update()
             file.write('score ' + str(sheet.getScore()) + '\n')
             file.write('coins ' + str(int(oldcoins) + coins) + '\n')
@@ -287,8 +294,10 @@ def endScreen(): # Display this screen when the user completes trhe course
     list = courses.getPar(1)
     par = list[level - 1]
     sheet = scoreSheet(list)
+    #Set starting to True if we want a start screen
     starting = True
     hover = False
+
     while starting:
         pygame.time.delay(10)
         startScreen.mainScreen(hover)
@@ -390,7 +399,8 @@ def holeInOne():  # If player gets a hole in one display special mesage to scree
     text = myFont.render('Hole in One!', 1, (255,255,255))
     x = (winwidth / 2) - (text.get_width() / 2)
     y = (winheight / 2) - (text.get_height() / 2)
-    win.blit(text, (x, y))
+    #Update is necessary to not glitch ball into hole
+    #win.blit(text, (x, y))
     pygame.display.update()
     showScore()
 
@@ -418,9 +428,11 @@ def displayScore(stroke, par):  # Using proper golf terminology display score
         text = '+ ' + str(stroke - par) + ' :('
 
     label = myFont.render(text, 1, (255,255,255))
-    win.blit(label, ((winwidth//2) - (label.get_width() // 2), (winheight//2) - (label.get_height()//2)))
+    #win.blit(label, ((winwidth//2) - (label.get_width() // 2), (winheight//2) - (label.get_height()//2)))
+    
+    #Setting the display to zero score
+     #Updateand showscore is necessary to not glitch ball into hole
     pygame.display.update()
-
     showScore()
 
 
@@ -428,21 +440,23 @@ def redrawWindow(ball, line, shoot=False, update=True):
     global water, par, strokes, flagx
 
     win.blit(background, (-200, -100))  # REFRESH DISPLAY
-    for x in powerUpButtons:  # Draw the power up buttons in top right
-        pygame.draw.circle(win, (0, 0, 0), (x[0], x[1]), x[2] +2)
-        pygame.draw.circle(win, x[4], (x[0], x[1]), x[2])
-        text = parFont.render(x[3], 1, (255,255,255))
-        win.blit(text, (x[0] - (text.get_width()/2), x[1] - (text.get_height()/2)))
+    #for x in powerUpButtons:  # Draw the power up buttons in top right
+        #POWERUPDRAW commented out power up circles
+        #pygame.draw.circle(win, (0, 0, 0), (x[0], x[1]), x[2] +2)
+        #pygame.draw.circle(win, x[4], (x[0], x[1]), x[2])
+        #text = parFont.render(x[3], 1, (255,255,255))
+        #win.blit(text, (x[0] - (text.get_width()/2), x[1] - (text.get_height()/2)))
 
+    #STROKE DRAWING AND POWERUPS
     # Draw information such as strokes, par and powerups left
-    smallFont = pygame.font.SysFont('comicsansms', 20)
-    text = smallFont.render('Left: ' + str(powerUps), 1, (64,64,64))
-    win.blit(text, (920, 55))
+    #smallFont = pygame.font.SysFont('comicsansms', 20)
+    #text = smallFont.render('Left: ' + str(powerUps), 1, (64,64,64))
+    #win.blit(text, (920, 55))
 
-    text = parFont.render('Par: ' + str(par), 1, (64,64,64))
-    win.blit(text, (20,10))
-    text = parFont.render('Strokes: ' + str(strokes), 1, (64,64,64))
-    win.blit(text, (18,45))
+    #text = parFont.render('Par: ' + str(par), 1, (64,64,64))
+    #win.blit(text, (20,10))
+    #text = parFont.render('Strokes: ' + str(strokes), 1, (64,64,64))
+    #win.blit(text, (18,45))
 
     # Draw all objects in the level, each object has a specific image and orientation
     for i in objects:
@@ -578,7 +592,8 @@ setup(1)
 # Start loop
 # Display start screen
 hover = False
-starting = True
+#**SET STARTING TO TRUE IF WE WANT A START SCREEN**#
+starting = False
 while starting:
     pygame.time.delay(10)
     startScreen.mainScreen(hover)
@@ -665,12 +680,12 @@ while True:
                     if powerUps == 0:
                         error()
                         break
-                    elif x[3] == 'S':  # Sticky Ball (sticks to any non-hazard)
+                    elif x[3] == 'Z':  # 'S' Sticky Ball (sticks to any non-hazard) 
                         if stickyPower is False and superPower is False and powerUps > 0:
                             stickyPower = True
                             powerUps -= 1
                             ballColor = (255,0,255)
-                    elif x[3] == 'M':  # Mullagain, allows you to retry your sot from your previous position, will remove strokes u had on last shot
+                    elif x[3] == 'Z':  # 'M' Mullagain, allows you to retry your sot from your previous position, will remove strokes u had on last shot
                         if mullagain is False and powerUps > 0 and strokes >= 1:
                             mullagain = True
                             powerUps -= 1
@@ -684,7 +699,7 @@ while True:
                             else:
                                 strokes -= 1
                             hazard = False
-                    elif x[3] == 'P':  # Power ball, power is multiplied by 1.5x
+                    elif x[3] == 'Z':  # 'P' Power ball, power is multiplied by 1.5x
                         if superPower is False and stickyPower is False and powerUps > 0:
                             superPower = True
                             powerUps -= 1
@@ -722,13 +737,18 @@ while True:
                                 if SOUND:
                                     puttSound.play()
                             if put:
-                                power = (math.pi - powerAngle) * 5
+                                #REPLACE powerAngle with getVelocity()
+                                #original has power angle insetead of velocity.getVelocity()
+                                
+                                power = (math.pi - velocity.getVelocity() ) * 5
                                 rollVel = power
                             else:
                                 if not superPower:  # Change power if we selected power ball
-                                    power = (math.pi - powerAngle) * 30
+                                    
+                                    power = (math.pi - velocity.getVelocity()) * 30
                                 else:
-                                    power = (math.pi - powerAngle) * 40
+                                    
+                                    power = (math.pi - velocity.getVelocity()) * 40
                             shootPos = ballStationary
                             powerLock = True
                             break
@@ -805,6 +825,7 @@ while True:
         if not(overHole(ballStationary[0], ballStationary[1])):  # If we aren't in the hole
             maxT = physics.maxTime(power, angle)
             time += 0.085
+            
             ballCords = physics.ballPath(ballStationary[0], ballStationary[1], power, angle, time)
             redrawWindow(ballCords, None, True)
 
@@ -887,6 +908,9 @@ while True:
                 elif i[4] != 'flag' and i[4] != 'coin':
                     if ballCords[1] > i[1] - 2 and ballCords[1] < i[1] + 7 and ballCords[0] < i[0] + i[2] and ballCords[0] > i[0]:
                         hitting = False
+                        
+                        
+
                         power = physics.findPower(power, angle, time)
                         if angle > math.pi * (1/2) and angle < math.pi:
                             x = physics.findAngle(power, angle)
@@ -901,6 +925,7 @@ while True:
                             angle = x
 
                         power = power * 0.5
+                        
                         if time > 0.15:
                             time = 0
                         subtract = 0
@@ -992,6 +1017,7 @@ while True:
                             x = physics.findAngle(power, angle)
                             angle = math.pi * 2 - x
 
+                        #Power is divided by 2
                         power = power * 0.5
 
                         if time > 0.15:
@@ -1027,6 +1053,7 @@ while True:
                                 x = physics.findAngle(power, angle)
                                 angle = 2 * math.pi - x
 
+                        #Power divided by 2
                         power = power * 0.5
                         if time > 0.04:
                             time = 0
