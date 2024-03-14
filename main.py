@@ -3,6 +3,7 @@ import sys
 import get_pip
 import os
 import velocity
+import audio
 
 def install(package):
     subprocess.call([sys.executable, "-m", "pip", "install", package])
@@ -440,12 +441,12 @@ def redrawWindow(ball, line, shoot=False, update=True):
     global water, par, strokes, flagx
 
     win.blit(background, (-200, -100))  # REFRESH DISPLAY
-    #for x in powerUpButtons:  # Draw the power up buttons in top right
+    for x in powerUpButtons:  # Draw the power up buttons in top right
         #POWERUPDRAW commented out power up circles
-        #pygame.draw.circle(win, (0, 0, 0), (x[0], x[1]), x[2] +2)
-        #pygame.draw.circle(win, x[4], (x[0], x[1]), x[2])
-        #text = parFont.render(x[3], 1, (255,255,255))
-        #win.blit(text, (x[0] - (text.get_width()/2), x[1] - (text.get_height()/2)))
+        pygame.draw.circle(win, (0, 0, 0), (x[0], x[1]), x[2] +2)
+        pygame.draw.circle(win, x[4], (x[0], x[1]), x[2])
+        text = parFont.render(x[3], 1, (255,255,255))
+        win.blit(text, (x[0] - (text.get_width()/2), x[1] - (text.get_height()/2)))
 
     #STROKE DRAWING AND POWERUPS
     # Draw information such as strokes, par and powerups left
@@ -673,19 +674,41 @@ while True:
             lock = 0
             pos = pygame.mouse.get_pos()
             # See if power up buttons are clicked
+            #Alter to see if sticky ball 
+
+
+            
+            #stickyPower = audio.powerUp()
+
+            #audio.spellCast()
+            #powerUpButtons = [[900, 35, 20, 'P', (255,69,0)],[1000, 35, 20, 'S', (255,0,255)], [950, 35, 20, 'M', (105,105,105)]]
+            #print(pos[0])
+            #print[pos[1]]
+
             for x in powerUpButtons:
                 # Check collision of mouse and button
                 if pos[0] < x[0] + x[2] and pos[0] > x[0] - x[2] and pos[1] < x[1] + x[2] and pos[1] > x[1] - x[2]:
                     lock = -1
+                    
                     if powerUps == 0:
+
                         error()
                         break
-                    elif x[3] == 'Z':  # 'S' Sticky Ball (sticks to any non-hazard) 
+                    elif x[3] == 'S':  # 'S' Sticky Ball (sticks to any non-hazard) 
+
                         if stickyPower is False and superPower is False and powerUps > 0:
-                            stickyPower = True
-                            powerUps -= 1
-                            ballColor = (255,0,255)
-                    elif x[3] == 'Z':  # 'M' Mullagain, allows you to retry your sot from your previous position, will remove strokes u had on last shot
+                            
+                            m_spell = audio.spellCast()
+                            print(m_spell)
+                            if(m_spell == "water"):
+                                print("Linking successful")
+                                stickyPower = True
+                                powerUps -= 1
+                                ballColor = (255,0,255)
+                                
+
+                            
+                    elif x[3] == 'M':  # 'M' Mullagain, allows you to retry your sot from your previous position, will remove strokes u had on last shot
                         if mullagain is False and powerUps > 0 and strokes >= 1:
                             mullagain = True
                             powerUps -= 1
@@ -699,7 +722,7 @@ while True:
                             else:
                                 strokes -= 1
                             hazard = False
-                    elif x[3] == 'Z':  # 'P' Power ball, power is multiplied by 1.5x
+                    elif x[3] == 'P':  # 'P' Power ball, power is multiplied by 1.5x
                         if superPower is False and stickyPower is False and powerUps > 0:
                             superPower = True
                             powerUps -= 1
