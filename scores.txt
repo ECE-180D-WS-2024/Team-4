@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 score 0
 coins 0
-=======
-score -1
 coins 0
 255,0,0-False
 255,105,180-False
