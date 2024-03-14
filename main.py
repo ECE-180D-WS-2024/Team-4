@@ -4,6 +4,8 @@ import get_pip
 import os
 import velocity
 import audio
+import app
+
 
 def install(package):
     subprocess.call([sys.executable, "-m", "pip", "install", package])
@@ -92,6 +94,7 @@ objects = []
 put = False
 shoot = False
 start = True
+handGesture = "none"
 
 # LOAD MUSIC
 if SOUND:
@@ -582,6 +585,10 @@ ballStationary = pos
 setup(1)
 
 
+#We want to edit 
+
+
+
 # MAIN GAME LOOP:
 # - Collision of ball
 # - Locking angle and power
@@ -594,6 +601,7 @@ setup(1)
 # Display start screen
 hover = False
 #**SET STARTING TO TRUE IF WE WANT A START SCREEN**#
+
 starting = False
 while starting:
     pygame.time.delay(10)
@@ -697,9 +705,24 @@ while True:
                     elif x[3] == 'S':  # 'S' Sticky Ball (sticks to any non-hazard) 
 
                         if stickyPower is False and superPower is False and powerUps > 0:
+                            #LOOP THROUGH TO
+                            #linker
+                            #handGesture = "none"
+                            #if(handGesture == "none"):
+                            #    handGesture = app.main()
+                            #print(app.main())  
+
+                            #CODE FOR LINKING HAND GESTURE SCRIPT  
+                            handGesture = app.main()
                             
                             m_spell = audio.spellCast()
                             print(m_spell)
+
+                            if(handGesture == "open"):
+                                print("Defend")
+                            elif(handGesture == "close"):
+                                print("Attack")
+
                             if(m_spell == "water"):
                                 print("Linking successful")
                                 stickyPower = True
