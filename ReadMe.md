@@ -6,21 +6,20 @@ Brief description of your project goes here.
 
 ## Table of Contents
 
-1. [Installation](#installation)
-2. [Usage](#usage)
-3. [Data](#data)
-4. [Contributing](#contributing)
-5. [License](#license)
+1. [GUI/pyGame](#GUI/pyGame)
+2. [OpenCV](#OpenCV)
+3. [MQTT](#mqtt)
+4. [Speech Recognition](#speechrecognition)
 
-## Installation
+## GUI/pyGame
 
 Explain how to install and set up your project. Include any dependencies and how to install them.
 
-## Usage
+## OpenCV
 
 Provide instructions on how to use your project. Include code examples and/or screenshots if applicable.
 
-## Data
+## MQTT
 
 In this section, you can include placeholder images for your data. Feel free to organize your data into subfolders as needed.
 
@@ -54,6 +53,6 @@ Brief description of the data in this subfolder, including digest statistics and
 
 Explain how others can contribute to your project, such as reporting bugs or submitting pull requests.
 
-## License
+## Speech Recognition
 
 Include information about the license under which your project is distributed.
