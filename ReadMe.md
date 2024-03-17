@@ -9,7 +9,7 @@ Brief description of your project goes here.
 1. [GUI/pyGame](#pyGame)
 2. [OpenCV](#OpenCV)
 3. [MQTT](#mqtt)
-4. [Speech](#speechrecognition)
+4. [Speech](#speech)
 
 ## pyGame
 
