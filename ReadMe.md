@@ -23,6 +23,10 @@ Provide instructions on how to use your project. Include code examples and/or sc
 
 In this section, you can include placeholder images for your data. Feel free to organize your data into subfolders as needed.
 
+## Speech Recognition
+
+In this section, you can include placeholder images for your data. Feel free to organize your data into subfolders as needed.
+
 ### Subfolder 1
 
 ![Placeholder Image 1](./data/placeholder_image_1.png)
