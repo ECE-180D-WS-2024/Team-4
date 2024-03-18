@@ -82,5 +82,12 @@ The above are screenshots of gesture and audio testing performed by our lab grou
 
 Gesture recognition performed properly with minimal miscaptures of user input.  It might be helped to slightly increase the amount of successive gestures that need to be read to count as an ATTACK or DEFEND spell cast.  Additionally, user instruction at the beginning of the game should tell users to be mindful of their hands when casting spells (so as to not misgesture)  
 
+Digest Stats:
+Game runs with a 1.0 second MQTT delay when on a personal hotspot. With more testing, this is aimed to be optimized and reduced.
+10 gestures are needed to be successfully recorded for the powerups to continue functioning.  This causes some game delay (dependent on user input ability), but stabilizes gameplay and gets more accurate readings of data.  
+Audio processing looks for segments of audio which are less than 4 seconds in length.  This encourages short phrases and aids the program in searching for the correct phrase.  
+
+
+
 
 
