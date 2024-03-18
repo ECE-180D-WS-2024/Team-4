@@ -21,15 +21,29 @@ Our python game script serves as the central linker for all project components.
 To play the game, run the command:
 
 ```bash
+python main.py
+```
+Testing:
+Testing the python script is a constant process to make sure the graphic user interface is functioning properly.    
+
+## OpenCV and Gesture Recognition
+
+To run the gesture recognition seperate from the central gamescript, run the command: 
+
+```bash
 python app.py
 ```
 
+For an in depth tutorial of how the source code works, please read the more detailed GESTUREREADME.md file in this repository. 
 
-## OpenCV
+Testing and Integration:
+Early stage testing promised stable gesture recognition.  
+<img width="300" alt="Screen Shot 2024-03-17 at 10 40 05 PM" src="https://github.com/ECE-180D-WS-2024/Team-4/assets/97809757/dfd78fea-f1f4-481f-80ce-b2d79db0f448">
+<img width="300" alt="Screen Shot 2024-03-17 at 10 40 33 PM" src="https://github.com/ECE-180D-WS-2024/Team-4/assets/97809757/f0728f65-d499-4017-9b28-134909302d20">
 
-INSERT DOCUMENTATION/ Instructions
+Occasionally, the recognizer will read an misinterpret input from a user but will quickly correct to the most likely gesture.  To prevent overguessing, the gamescript saves a gesture only after 10 gestures have been recorded by the recognizer.  
 
-INSERT IMAGES OF THE GAMEPLAYSCREEN
+Hyper contrasted light settings also prove a challenge for the recognizer. Making sure the player is in a stable light environment could prove helpful for playability. The game does not continue without proper gesture input is the current state solution, where users are inclined to alter their gesture slightly until input is received.  
 
 ## MQTT
 IMU and Microcontroller MQTT Linking
