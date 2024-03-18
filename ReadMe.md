@@ -14,9 +14,15 @@ Two-dimensional golf game for competing “wizards” that are capable of earnin
 
 ## pyGame
 
-INSERT DOCUMENTATION/ Instructions of gameplay demo
+Our python game script serves as the central linker for all project components. 
 
-<img width="200" alt="Screen Shot 2024-03-17 at 10 30 09 PM" src="https://github.com/ECE-180D-WS-2024/Team-4/assets/97809757/53343f65-7e6f-4c04-8d78-9d52ef812cb1">
+<img width="300" alt="Screen Shot 2024-03-17 at 10 30 09 PM" src="https://github.com/ECE-180D-WS-2024/Team-4/assets/97809757/53343f65-7e6f-4c04-8d78-9d52ef812cb1">
+
+To play the game, run the command:
+
+```bash
+python app.py
+```
 
 
 ## OpenCV
