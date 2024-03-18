@@ -28,6 +28,7 @@ INSERT IMAGES OF THE GAMEPLAYSCREEN
 IMU and Microcontroller MQTT Linking
 - IMUvelocitysending3_16.ino
 - Velocity.py
+  
 Similar to Lab 3, we developed a line of MQTT communication to link the game with the MCU where we publish our swing data velocity to a topic that the pyGame is subscribed to.  The progress we have made thus far is a working model that calculates the maximum “velocity” in the swing after the angle is clicked in the game, achieved by getting the angular velocity (DPS) from the Gyroscope data from the IMU.
 
 INSERT DOCUMENTATION
