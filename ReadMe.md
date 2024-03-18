@@ -66,7 +66,7 @@ For the actual MQTT and IMU testing, velocity data was constantly being read abo
 
 <img width="150" alt="Screen Shot 2024-03-18 at 10 15 31 AM" src="https://github.com/ECE-180D-WS-2024/Team-4/assets/97809757/1a1acc17-873b-4972-9c09-2a0d97ba4d38">
 
-INSERT IMAGES OF THE SCREEN
+The above screenshots show on the left, MQTT readout values, and on the right, successful linking to the python script. 
 
 ## Speech
 
