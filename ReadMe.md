@@ -1,55 +1,55 @@
-# Project Name
+# GOLF WIZARDS DOCUMENTATION
 
 ## Description
 
-Brief description of your project goes here.
+Two-dimensional golf game for competing “wizards” that are capable of earning magical power-ups throughout the course to gain advantages over their opponents.
+
 
 ## Table of Contents
 
-1. [GUI/pyGame](#pyGame)
+1. [pyGame](#pyGame)
 2. [OpenCV](#OpenCV)
 3. [MQTT](#mqtt)
 4. [Speech](#speech)
 
 ## pyGame
 
-Explain how to install and set up your project. Include any dependencies and how to install them.
+INSERT DOCUMENTATION/ Instructions of gameplay demo
+
+INSERT IMAGES OF THE GAMEPLAYSCREEN
 
 ## OpenCV
 
-Provide instructions on how to use your project. Include code examples and/or screenshots if applicable.
+INSERT DOCUMENTATION/ Instructions
+
+INSERT IMAGES OF THE GAMEPLAYSCREEN
 
 ## MQTT
+IMU and Microcontroller MQTT Linking
+- IMUvelocitysending3_16.ino
+- Velocity.py
+Similar to Lab 3, we developed a line of MQTT communication to link the game with the MCU where we publish our swing data velocity to a topic that the pyGame is subscribed to.  The progress we have made thus far is a working model that calculates the maximum “velocity” in the swing after the angle is clicked in the game, achieved by getting the angular velocity (DPS) from the Gyroscope data from the IMU.
 
-In this section, you can include placeholder images for your data. Feel free to organize your data into subfolders as needed.
+INSERT DOCUMENTATION
+
+INSERT IMAGES OF THE SCREEN
 
 ## Speech
 
-In this section, you can include placeholder images for your data. Feel free to organize your data into subfolders as needed.
+INSERT DOCUMENTATION
 
-### Subfolder 1
+INSERT IMAGES OF THE GAMEPLAYSCREEN
+
+### Image 1
 
 ![Placeholder Image 1](./data/placeholder_image_1.png)
 
-### Subfolder 2
+### Image 2
 
 ![Placeholder Image 2](./data/placeholder_image_2.png)
 
-### Subfolder 3
+### Image 3
 
 ![Placeholder Image 3](./data/placeholder_image_3.png)
 
-Include a README file within each subfolder to document statistics and details about the data it contains.
-
-### README for Subfolder 1
-
-Brief description of the data in this subfolder, including digest statistics and documentation.
-
-### README for Subfolder 2
-
-Brief description of the data in this subfolder, including digest statistics and documentation.
-
-### README for Subfolder 3
-
-Brief description of the data in this subfolder, including digest statistics and documentation.
 
