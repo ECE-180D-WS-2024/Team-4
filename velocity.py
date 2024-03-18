@@ -26,8 +26,10 @@ def getVelocity():
     run()
     scaled_velocity = (1-m_vel) * math.pi
 
+    #print(scaled_velocity)
+    
     #TESTING
-    scaled_velocity = 0
+    #scaled_velocity = 0
 
     return scaled_velocity
 
@@ -52,7 +54,7 @@ def on_connect(client, userdata, flags, rc):
     print("Connection returned result: " + str(rc))
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe("ece180d/test", qos=1)
+    client.subscribe("ece180d/testteam4", qos=1)
 
 # The callback of the client when it disconnects.
 def on_disconnect(client, userdata, rc):
@@ -67,10 +69,11 @@ def on_disconnect(client, userdata, rc):
 def on_message(client, userdata, message):
         decoded_payload = message.payload.decode('utf-8')
         input_vel = decoded_payload
+        #print(input_vel)
         setVelocity(input_vel)
 
 # Create a client instance.
-        
+
 
 def run():
         
@@ -99,15 +102,16 @@ def run():
         #DELAY 
         #SEEM TO NEED A DELAY OF 0.5 seconds here to allow for the data to be transmitted
         #perhaps future tests could establish something else
-        time.sleep(.5)
-        #print(getVelocisty())
+        #print(1)
+        #Can i go lower?
+        time.sleep(0.5)
+        #decoded_payload = message.payload.decode('utf-8')
         break
         
-        pass  # Do your non-blocked other stuff here, like receive IMU data or something.
+        #pass  # Do your non-blocked other stuff here, like receive IMU data or something.
     # Use subscribe() to subscribe to a topic and receive messages.
     # Use publish() to publish messages to the broker.
     # Use disconnect() to disconnect from the broker.
+
     client.loop_stop()
     client.disconnect()
-
-run()
