@@ -186,6 +186,7 @@ def main():
 
 
                 handGesture = keypoint_classifier_labels[hand_sign_id]
+                print(handGesture)
                 if(handGesture == "Open"):
                     openCounter = openCounter + 1
                 if(handGesture == "Close"):
@@ -197,9 +198,6 @@ def main():
                 if(closedCounter > 9):
                     handGesture = "close"
                     #print(handGesture)
-
-                
-
 
                 #Uncomment to test gesture printing
                 #print(gameGesture(handGesture))

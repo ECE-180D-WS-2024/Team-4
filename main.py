@@ -5,6 +5,7 @@ import os
 import velocity
 import audio
 import app
+import time as time_mod
 
 
 def install(package):
@@ -714,17 +715,17 @@ while True:
 
                             #CODE FOR LINKING HAND GESTURE SCRIPT  
                             handGesture = app.main()
-                            
+                            if(handGesture == "open"):
+                                print("Defend")
+                                
+                            elif(handGesture == "close"):
+                                print("Attack")
+                                
                             m_spell = audio.spellCast()
                             print(m_spell)
 
-                            if(handGesture == "open"):
-                                print("Defend")
-                            elif(handGesture == "close"):
-                                print("Attack")
-
                             if(m_spell == "water"):
-                                print("Linking successful")
+                                print("Audio Linking Successful, Water is the Magic Word")
                                 stickyPower = True
                                 powerUps -= 1
                                 ballColor = (255,0,255)
