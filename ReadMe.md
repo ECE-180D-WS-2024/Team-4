@@ -16,7 +16,8 @@ Two-dimensional golf game for competing “wizards” that are capable of earnin
 
 INSERT DOCUMENTATION/ Instructions of gameplay demo
 
-INSERT IMAGES OF THE GAMEPLAYSCREEN
+<img width="200" alt="Screen Shot 2024-03-17 at 10 30 09 PM" src="https://github.com/ECE-180D-WS-2024/Team-4/assets/97809757/53343f65-7e6f-4c04-8d78-9d52ef812cb1">
+
 
 ## OpenCV
 
