@@ -68,6 +68,9 @@ water = pygame.image.load(os.path.join('img', 'water.png'))
 laser = pygame.image.load(os.path.join('img', 'laser.png'))
 sticky = pygame.image.load(os.path.join('img', 'sticky.png'))
 coinPics = [pygame.image.load(os.path.join('img', 'coin1.png')), pygame.image.load(os.path.join('img', 'coin2.png')), pygame.image.load(os.path.join('img', 'coin3.png')), pygame.image.load(os.path.join('img', 'coin4.png')), pygame.image.load(os.path.join('img', 'coin5.png')), pygame.image.load(os.path.join('img', 'coin6.png')), pygame.image.load(os.path.join('img', 'coin7.png')), pygame.image.load(os.path.join('img', 'coin8.png'))]
+
+mysteryBox = pygame.image.load(os.path.join('img', 'box.png'))
+
 powerMeter = pygame.image.load(os.path.join('img', 'power.png'))
 powerMeter = pygame.transform.scale(powerMeter, (150,150))
 
@@ -87,7 +90,9 @@ flagx = 0
 coins = 0
 shootPos = ()
 ballColor = (255,255,255)
+ballColor2 = (255,0,0)
 ballStationary = ()
+ballStationary2 = ()
 line = None
 power = 0
 hole = ()
@@ -95,7 +100,15 @@ objects = []
 put = False
 shoot = False
 start = True
+
+
+powerUpPlayer1 = False
+powerUpPlayer2 = False
+
+
 handGesture = "none"
+player1_turn = True
+
 
 # LOAD MUSIC
 if SOUND:
@@ -344,7 +357,7 @@ def endScreen(): # Display this screen when the user completes trhe course
 
 
 def setup(level):  # Setup objects for the level from module courses
-    global line, par, hole, power, ballStationary, objects, ballColor, stickyPower, superPower, mullagain
+    global line, par, hole, power, ballStationary, ballStationary2, objects, ballColor, ballColor2, stickyPower, superPower, mullagain
     ballColor = (255,255,255)
     stickyPower = False
     superPower = False
@@ -356,7 +369,7 @@ def setup(level):  # Setup objects for the level from module courses
         par = list[level - 1]
         pos = courses.getStart(level, 1)
         ballStationary = pos
-
+        ballStationary2 = (pos[0] - 10, pos[1])
         objects = courses.getLvl(level)
 
         # Create the borders if sand is one of the objects
@@ -440,17 +453,27 @@ def displayScore(stroke, par):  # Using proper golf terminology display score
     pygame.display.update()
     showScore()
 
-
-def redrawWindow(ball, line, shoot=False, update=True):
+#Need to Change Parameters
+def redrawWindow(ball, ball2, line, shoot=False, update=True):
     global water, par, strokes, flagx
 
     win.blit(background, (-200, -100))  # REFRESH DISPLAY
-    for x in powerUpButtons:  # Draw the power up buttons in top right
+
+
+
+    for x in powerUpButtons[1:-1]:  # Draw the power up buttons in top right
         #POWERUPDRAW commented out power up circles
-        pygame.draw.circle(win, (0, 0, 0), (x[0], x[1]), x[2] +2)
-        pygame.draw.circle(win, x[4], (x[0], x[1]), x[2])
-        text = parFont.render(x[3], 1, (255,255,255))
-        win.blit(text, (x[0] - (text.get_width()/2), x[1] - (text.get_height()/2)))
+        #DRAWSCROLL
+        if(powerUpPlayer1 and player1_turn):
+            pygame.draw.circle(win, (0, 0, 0), (x[0], x[1]), x[2] +2)
+            pygame.draw.circle(win, x[4], (x[0], x[1]), x[2])
+            text = parFont.render("1", 1, (255,255,255))
+            win.blit(text, (x[0] - (text.get_width()/2), x[1] - (text.get_height()/2)))
+        if(powerUpPlayer2 and (player1_turn == False)):
+            pygame.draw.circle(win, (0, 0, 0), (x[0], x[1]), x[2] +2)
+            pygame.draw.circle(win, x[4], (x[0], x[1]), x[2])
+            text = parFont.render("2", 1, (255,255,255))
+            win.blit(text, (x[0] - (text.get_width()/2), x[1] - (text.get_height()/2)))
 
     #STROKE DRAWING AND POWERUPS
     # Draw information such as strokes, par and powerups left
@@ -505,11 +528,20 @@ def redrawWindow(ball, line, shoot=False, update=True):
     win.blit(powerMeter, (4, 520))
 
     if line != None and not (shoot): # If we are not in the process of shooting show the angle line
-        pygame.draw.line(win, (0, 0, 0), ballStationary, line, 2)
+        if(player1_turn):
+
+            pygame.draw.line(win, (0, 0, 0), ballStationary, line, 2)
+        else:
+            pygame.draw.line(win, (0, 0, 0), ballStationary2, line, 2)
 
     # Draw the ball and its outline
     pygame.draw.circle(win, (0, 0, 0), ball, 5)
     pygame.draw.circle(win, ballColor, ball, 4)
+
+    #Multiplayer Initial Draw
+    #Player2
+    pygame.draw.circle(win, (0, 0, 0), ball2, 5)
+    pygame.draw.circle(win, ballColor2, ball2, 4)
 
     if update:
         powerBar()
@@ -523,13 +555,17 @@ def coinImg():  # Animation for spinning coin, coin acts as currency
         coinTime = 0
     if coinIndex == 8:
         coinIndex = 0
+    #print(coinPics[coinIndex])
+    return pygame.image.load(os.path.join('img', 'box.png'))
+    #return "box.png"
+#Old Code 
     return coinPics[coinIndex]
 
 
 def powerBar(moving=False, angle=0):
     if moving:
         # Move the arm on the power meter if we've locked the angle
-        redrawWindow(ballStationary, line, False, False)
+        redrawWindow(ballStationary, ballStationary2, line, False, False)
         pygame.draw.line(win, (255,255,255), (80, winheight -7), (int(80 + round(math.cos(angle) * 60)), int((winheight - (math.sin(angle) * 60)))), 3)
     pygame.display.update()
 
@@ -537,8 +573,12 @@ def powerBar(moving=False, angle=0):
 
 # Find the angle that the ball hits the ground at
 def findAngle(pos):
-    sX = ballStationary[0]
-    sY = ballStationary[1]
+    if(player1_turn):
+        sX = ballStationary[0]
+        sY = ballStationary[1]
+    else:
+        sX = ballStationary2[0]
+        sY = ballStationary2[1]
     try:
         angle = math.atan((sY - pos[1]) / (sX - pos[0]))
     except:
@@ -728,9 +768,13 @@ while True:
                                 print("Audio Linking Successful, Water is the Magic Word")
                                 stickyPower = True
                                 powerUps -= 1
-                                ballColor = (255,0,255)
+                                if(player1_turn):
+                                    ballColor = (255,0,255)
+                                    powerUpPlayer1 = False
+                                else:
+                                    ballColor2 = (255,0,255)
+                                    powerUpPlayer2 = False
                                 
-
                             
                     elif x[3] == 'M':  # 'M' Mullagain, allows you to retry your sot from your previous position, will remove strokes u had on last shot
                         if mullagain is False and powerUps > 0 and strokes >= 1:
@@ -768,7 +812,7 @@ while True:
                         if powerAngle < 0 or powerAngle > math.pi:
                             neg = neg * -1
                     else:
-                        redrawWindow(ballStationary, line, False, False)
+                        redrawWindow(ballStationary, ballStationary2, line, False, False)
 
 
                     for event in pygame.event.get():
@@ -792,18 +836,31 @@ while True:
                             else:
                                 if not superPower:  # Change power if we selected power ball
                                     
-                                    power = (math.pi - velocity.getVelocity()) * 30
+                                    power = (math.pi - velocity.getVelocity()) * 30 * 4
                                 else:
                                     
-                                    power = (math.pi - velocity.getVelocity()) * 40
-                            shootPos = ballStationary
+                                    power = (math.pi - velocity.getVelocity()) * 40 * 4
+
+                            if(player1_turn):
+                                shootPos = ballStationary
+                            else:
+                                shootPos = ballStationary2
                             powerLock = True
-                            break
+                            #Good Place to Switch Turns
+                            #if(player1_turn):
+                                #player1_turn = False
+                            #else:
+                                #player1_turn = True
+                            #break
 
         if event.type == pygame.MOUSEMOTION:  # Change the position of the angle line
             pos = pygame.mouse.get_pos()
             angle = findAngle(pos)
-            line = (round(ballStationary[0] + (math.cos(angle) * 50)), round(ballStationary[1] - (math.sin(angle) * 50)))
+
+            if(player1_turn):
+                line = (round(ballStationary[0] + (math.cos(angle) * 50)), round(ballStationary[1] - (math.sin(angle) * 50)))
+            else:
+                line = (round(ballStationary2[0] + (math.cos(angle) * 50)), round(ballStationary2[1] - (math.sin(angle) * 50)))
 
             if onGreen():  # If we are on green have the angle lin point towards the hole, bc putter cannot chip
                 if ballStationary[0] > flagx:
@@ -813,7 +870,7 @@ while True:
                     angle = 0
                     line = (ballStationary[0] + 30, ballStationary[1])
 
-    redrawWindow(ballStationary, line)
+    redrawWindow(ballStationary, ballStationary2, line)
     hitting = False
 
     while put and not shoot:  # If we are putting
@@ -825,7 +882,7 @@ while True:
                 ballStationary = (round(ballStationary[0] - rollVel), ballStationary[1])
             else:
                 ballStationary = (round(ballStationary[0] + rollVel), ballStationary[1])
-            redrawWindow(ballStationary, None, True)
+            redrawWindow(ballStationary, ballStationary2, None, True)
 
             if rollVel < 0.5:  # Stop moving ball if power is low enough
                 time = 0
@@ -848,7 +905,7 @@ while True:
                 inHole.play()
             while True:  # Move ball so it looks like it goes into the hole (increase y value)
                 pygame.time.delay(20)
-                redrawWindow(ballStationary, None, True)
+                redrawWindow(ballStationary, ballStationary2, None, True)
                 ballStationary = (ballStationary[0], ballStationary[1] + 1)
                 if ballStationary[0] > hole[0]:
                     ballStationary = (ballStationary[0] - 1, ballStationary[1])
@@ -873,8 +930,18 @@ while True:
             maxT = physics.maxTime(power, angle)
             time += 0.085
             
-            ballCords = physics.ballPath(ballStationary[0], ballStationary[1], power, angle, time)
-            redrawWindow(ballCords, None, True)
+            
+            #ballCords = physics.ballPath(ballStationary2[0], ballStationary2[1], power, angle, time)
+
+            
+            if(player1_turn):
+                ballCords = physics.ballPath(ballStationary[0], ballStationary[1], power, angle, time)
+                redrawWindow(ballCords, ballStationary2, None, True)
+                #player1_turn = False
+            else:
+                ballCords = physics.ballPath(ballStationary2[0], ballStationary2[1], power, angle, time)
+                redrawWindow(ballStationary, ballCords, None, True)
+                #player1_turn = True
 
             # TO FIX GLITCH WHERE YOU GO THROUGH WALLS AND FLOORS
             if ballCords[1] > 650:
@@ -895,9 +962,15 @@ while True:
             for i in objects:  # for every object in the level
                 if i[4] == 'coin':  # If the ball hits a coin
                     if i[5]:
+
                         if ballCords[0] < i[0] + i[2] and ballCords[0] > i[0] and ballCords[1] > i[1] and ballCords[1] < i[1] + i[3]:
                             courses.coinHit(level - 1)
                             coins += 1
+                            print("HIT COIN")
+                            if(player1_turn):
+                                powerUpPlayer1 = True
+                            if(player1_turn == False):
+                                powerUpPlayer2 = True
 
                 if i[4] == 'laser':  # if the ball hits the laser hazard
                     if ballCords[0] > i[0] and ballCords[0] < i[0] + i[2] and ballCords[1] > i[1] and ballCords[1] < i[1] + i[3]:
@@ -908,6 +981,8 @@ while True:
                         time = 0
                         pos = pygame.mouse.get_pos()
                         angle = findAngle(pos)
+
+                        
                         line = (round(ballStationary[0] + (math.cos(angle) * 50)),
                                 round(ballStationary[1] - (math.sin(angle) * 50)))
                         power = 1
@@ -920,6 +995,7 @@ while True:
                         pygame.display.update()
                         pygame.time.delay(1000)
                         ballColor = (255,255,255)
+
                         stickyPower = False
                         superPower = False
                         mullagain = False
@@ -930,11 +1006,19 @@ while True:
                         ballCords = shootPos
                         subtract = 0
                         hazard = True
-                        ballStationary = ballCords
+                        if(player1_turn):
+                            ballStationary = ballCords
+                        else:
+                            ballStationary2 = ballCords
                         time = 0
                         pos = pygame.mouse.get_pos()
                         angle = findAngle(pos)
-                        line = (round(ballStationary[0] + (math.cos(angle) * 50)), round(ballStationary[1] - (math.sin(angle) * 50)))
+
+                        if(player1_turn):
+                            line = (round(ballStationary[0] + (math.cos(angle) * 50)), round(ballStationary[1] - (math.sin(angle) * 50)))
+                        else:
+                            line = (round(ballStationary2[0] + (math.cos(angle) * 50)), round(ballStationary2[1] - (math.sin(angle) * 50)))
+            
                         power = 1
                         powerAngle = math.pi
                         shoot = False
@@ -955,6 +1039,7 @@ while True:
                 elif i[4] != 'flag' and i[4] != 'coin':
                     if ballCords[1] > i[1] - 2 and ballCords[1] < i[1] + 7 and ballCords[0] < i[0] + i[2] and ballCords[0] > i[0]:
                         hitting = False
+                        #THIS IS THE COLLISION LOOP FOR THE GROUND
                         
                         
 
@@ -981,7 +1066,12 @@ while True:
                             if ballCords[1] - subtract < i[1]:
                                 ballCords = (ballCords[0], ballCords[1] - subtract)
                                 break
-                        ballStationary = ballCords
+
+                        if(player1_turn):
+                            ballStationary = ballCords
+                        else:
+                            ballStationary2 = ballCords
+                        
 
                         if i[4] == 'sand':
                             subtract = 0
@@ -1002,18 +1092,29 @@ while True:
                                     break
 
 
-                            ballStationary = ballCords
+                            if(player1_turn):
+                                ballStationary = ballCords
+                            else:
+                                ballStationary2 = ballCords
                             shoot = False
                             time = 0
                             pos = pygame.mouse.get_pos()
                             angle = findAngle(pos)
-                            line = (round(ballStationary[0] + (math.cos(angle) * 50)),
+                            if(player1_turn):
+                                line = (round(ballStationary[0] + (math.cos(angle) * 50)),
                                     round(ballStationary[1] - (math.sin(angle) * 50)))
+                            else:
+                                line = (round(ballStationary2[0] + (math.cos(angle) * 50)),
+                                    round(ballStationary2[1] - (math.sin(angle) * 50)))
+                            
+                            
+
                             power = 1
                             powerAngle = math.pi
 
 
                     elif ballCords[1] < i[1] + i[3] and ballCords[1] > i[1] and ballCords[0] > i[0] - 2 and ballCords[0] < i[0] + 10:
+                        
                         hitting = False
                         power = physics.findPower(power, angle, time)
                         if angle < math.pi / 2:
@@ -1039,7 +1140,10 @@ while True:
                             if ballCords[0] - subtract < i[0] - 3:
                                 ballCords = (ballCords[0] - subtract, ballCords[1])
                                 break
-                        ballStationary = ballCords
+                        if(player1_turn):
+                            ballStationary = ballCords
+                        else:
+                            ballStationary2 = ballCords
 
                         if i[4] == 'sticky' or stickyPower:
                             subtract = 0
@@ -1076,7 +1180,10 @@ while True:
                             if ballCords[0] + subtract > i[0] + i[2] + 4:
                                 ballCords = (ballCords[0] + subtract, ballCords[1])
                                 break
-                        ballStationary = ballCords
+                        if(player1_turn):
+                            ballStationary = ballCords
+                        else:
+                            ballStationary2 = ballCords
 
                         if i[4] == 'sticky' or stickyPower:
                             subtract = 0
@@ -1121,24 +1228,46 @@ while True:
                                     ballCords = (ballCords[0], ballCords[1] + subtract)
                                     power = 0
                                     break
-                        ballStationary = ballCords
-
+                        if(player1_turn):
+                            ballStationary = ballCords
+                        else:
+                            ballStationary2 = ballCords
                     if power < 2.5:
                         subtract = 0
                         pygame.display.update()
-                        ballStationary = ballCords
+                        if(player1_turn):
+                            ballStationary = ballCords
+                        else:
+                            ballStationary2 = ballCords
                         shoot = False
                         time = 0
                         pos = pygame.mouse.get_pos()
                         angle = findAngle(pos)
-                        line = (round(ballStationary[0] + (math.cos(angle) * 50)), round(ballStationary[1] - (math.sin(angle) * 50)))
+
+                        if(player1_turn):
+                            line = (round(ballStationary[0] + (math.cos(angle) * 50)), round(ballStationary[1] - (math.sin(angle) * 50)))
+                        else:
+                            line = (round(ballStationary2[0] + (math.cos(angle) * 50)), round(ballStationary2[1] - (math.sin(angle) * 50)))                        
+                        
+                        
                         power = 1
                         powerAngle = math.pi
-                        ballColor = (255,255,255)
+                        if(player1_turn):
+                            ballColor = (255,255,255)
+                        else:
+                            ballColor2 = (255,0,0)
                         stickyPower = False
                         mullagain = False
                         superPower = False
+
+                        #Good Place to Switch Turns
+                        if(player1_turn):
+                            player1_turn = False
+
+                        else:
+                            player1_turn = True
                         break
+                        
 
         else:
             if SOUND:
@@ -1146,7 +1275,7 @@ while True:
             var = True
             while var:
                 pygame.time.delay(20)
-                redrawWindow(ballStationary, None, True)
+                redrawWindow(ballStationary, ballStationary2, None, True)
                 ballStationary = (ballStationary[0], ballStationary[1] + 1)
                 if ballStationary[0] > hole[0]:
                     ballStationary = (ballStationary[0] - 1, ballStationary[1])
