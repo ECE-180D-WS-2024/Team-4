@@ -1,8 +1,6 @@
 import numpy as np
 import math
 import time
-
-
 #Returns a velocity within the range
 #max power angle is pi
 
@@ -23,14 +21,15 @@ m_vel = 0
 #if velocity > threshold
 def getVelocity():
     global m_vel
+    
     run()
     scaled_velocity = (1-m_vel) * math.pi
 
     #print(scaled_velocity)
     
     #TESTING
-    #scaled_velocity = 0
-
+    scaled_velocity = 2.1
+    print(scaled_velocity)
     return scaled_velocity
 
 def setVelocity(velocity):
@@ -69,7 +68,7 @@ def on_disconnect(client, userdata, rc):
 def on_message(client, userdata, message):
         decoded_payload = message.payload.decode('utf-8')
         input_vel = decoded_payload
-        #print(input_vel)
+        print(input_vel)
         setVelocity(input_vel)
 
 # Create a client instance.
@@ -104,7 +103,9 @@ def run():
         #perhaps future tests could establish something else
         #print(1)
         #Can i go lower?
-        time.sleep(0.5)
+        time.sleep(1)
+        #in class latency of 3!!! while on hotspot seems like the sweet spot
+        time.sleep(3)
         #decoded_payload = message.payload.decode('utf-8')
         break
         
