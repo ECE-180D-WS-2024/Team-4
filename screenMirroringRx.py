@@ -3,7 +3,7 @@ from vidstream import StreamingServer
 import threading
 
 #private ip address, port
-receiver = StreamingServer('131.179.4.104', 9999)
+receiver = StreamingServer('127.0.0.1', 9999)
 
 
 t = threading.Thread(target= receiver.start_server)
