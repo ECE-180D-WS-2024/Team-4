@@ -8,6 +8,7 @@ import app
 import time as time_mod
 
 
+
 def install(package):
     subprocess.call([sys.executable, "-m", "pip", "install", package])
 
@@ -83,6 +84,8 @@ coinIndex = 0
 time = 0
 rollVel = 0
 strokes = 0
+strokes_1 = 0
+strokes_2 = 0
 par = 0
 #OG lvl = 8
 level = 8
@@ -104,10 +107,11 @@ start = True
 
 powerUpPlayer1 = False
 powerUpPlayer2 = False
-
-
 handGesture = "none"
 player1_turn = True
+
+tutorial = True
+tut_seq = 0
 
 
 # LOAD MUSIC
@@ -481,10 +485,125 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
     #text = smallFont.render('Left: ' + str(powerUps), 1, (64,64,64))
     #win.blit(text, (920, 55))
 
-    #text = parFont.render('Par: ' + str(par), 1, (64,64,64))
-    #win.blit(text, (20,10))
-    #text = parFont.render('Strokes: ' + str(strokes), 1, (64,64,64))
-    #win.blit(text, (18,45))
+    this_turn = 1
+    this_stroke = 0
+    if(player1_turn):
+        this_turn = '1'
+        this_stroke = strokes_1
+
+    else:
+        this_turn = '2'
+        this_stroke = strokes_2
+
+    text = parFont.render('Player Turn: ' + this_turn, 1, (64,64,64))
+
+
+    win.blit(text, (20,10))
+    
+    text = parFont.render('Strokes: ' + str(this_stroke), 1, (64,64,64))
+    win.blit(text, (18,45))
+
+
+    #Welcome to the 89,575th annual golf wizarding tournament
+    #The tournament was established to determine the most talented golfing wizards in the realm of Samuelia
+    #Wizards will compete head to head, vying for the championship throne
+
+    #To enter the tournament, each wizard must provide proof of magic and basic movement training
+    #Let's start with player 1, move your mouse on screen to select swing direction
+    #Great! Now click to lock in the angle of swing
+    #So far so good, hold your casting button on your controller and take a swing to determine shot power
+    #Click on screen to send your power to the ball 
+    #Woah that was powerful!!
+    #Player 2, its your turn, move around!
+    #Player 1 try to reach that powerbox, once you aquire it, we can cast on your next turn
+    #Player 2, do the same
+    #Nice player 1, now click the scroll to cast your powerup.
+    #Hold your hand in front of the computer screen in the shape of a fist (to attack) or an open palm (to defend)
+    #Now, speak into the microphone the name of the powerup to activate
+    #Nice job, used used sticky ball, a powerup which sticks your ball to walls (this will be useful later)
+    #Let's get to the hole so we can complete our proof of magic requirement
+
+    #I think we have an array with player 1 and 2 instructions
+
+    #I have competed before or, first tournament if statement
+    if(tutorial):
+
+        if(tut_seq == 0):
+            text = parFont.render('Welcome to the 89,575th annual golf wizarding tournament!', 1, (64,64,64))
+            win.blit(text, (50,100))
+            text = parFont.render('To enter the tournament, each wizard must prove they', 1, (64,64,64))
+            win.blit(text, (50,135))
+            text = parFont.render('are magical by blood.......', 1, (64,64,64))
+            win.blit(text, (50,170))
+            text = parFont.render('Player 1, click the mouse to lock in your swing angle!', 1, (64,64,64))
+            win.blit(text, (50,240))
+            text = parFont.render('While holding the wand button, swing to capture your shot power.', 1, (64,64,64))
+            win.blit(text, (50,275))
+            text = parFont.render('After your swing, press the keyboard again to shoot!', 1, (64,64,64))
+            win.blit(text, (50,310))
+        if(tut_seq == 1):
+            text = parFont.render('Player 2, click the mouse to lock in your swing angle!', 1, (64,64,64))
+            win.blit(text, (50,100))
+            text = parFont.render('While holding the wand button, swing to capture your shot power.', 1, (64,64,64))
+            win.blit(text, (50,135))
+            text = parFont.render('After your swing, press the keyboard again to shoot!', 1, (64,64,64))
+            win.blit(text, (50,170))  
+        if(tut_seq == 2):
+            text = parFont.render('Well done Wizards, but this is only the first step.......', 1, (64,64,64))
+            win.blit(text, (50,100))
+            text = parFont.render('To enter the tournament, you each must successfully cast a spell.', 1, (64,64,64))
+            win.blit(text, (50,135))
+            text = parFont.render('To cast a spell, sorcerers must have in their posession, a charm.', 1, (64,64,64))
+            win.blit(text, (50,170)) 
+            text = parFont.render('Shoot your ball through the enchanted-gold to collect the charm!', 1, (64,64,64))
+            win.blit(text, (50,205)) 
+        if(tut_seq == 3):
+            text = parFont.render('Wizard 1, congrats on collecting the charm first!', 1, (64,64,64))
+            win.blit(text, (50,100))
+            text = parFont.render('For testing purposes, you have both been awarded the sticky-ball charm.', 1, (64,64,64))
+            win.blit(text, (50,135))
+            text = parFont.render('Casting is a two step process, so listen carefully!', 1, (64,64,64))
+            win.blit(text, (50,170)) 
+            text = parFont.render('Click the spell icon (top right) to initiate casting!', 1, (64,64,64))
+            win.blit(text, (50,205)) 
+        if(tut_seq == 4):
+            text = parFont.render('Wizard 2, congrats on collecting the charm first!', 1, (64,64,64))
+            win.blit(text, (50,100))
+            text = parFont.render('For testing purposes, you have both been awarded the sticky-ball charm.', 1, (64,64,64))
+            win.blit(text, (50,135))
+            text = parFont.render('Casting is a two step process, so listen carefully!', 1, (64,64,64))
+            win.blit(text, (50,170)) 
+            text = parFont.render('Click the spell icon (top right) to initiate casting!', 1, (64,64,64))
+            win.blit(text, (50,205)) 
+        if(tut_seq == 5):
+            text = parFont.render('As per sorcerers guidelines, spells must be cast at start of each turn', 1, (64,64,64))
+            win.blit(text, (50,100))
+            text = parFont.render('Spells can be applied to your opponent or self', 1, (64,64,64))
+            win.blit(text, (50,135))
+            text = parFont.render('Raise your hand in a fist to apply your powerup to your opponent', 1, (64,64,64))
+            win.blit(text, (50,170))
+            text = parFont.render('Raise an open facing palm to apply to powerup to self ', 1, (64,64,64))
+            win.blit(text, (50,205))
+
+
+        #text = parFont.render('Spells can either be applied to yourself or your opponent on their next turn', 1, (64,64,64))
+        #win.blit(text, (50,100))
+        #text = parFont.render('Show your camera your hand in a fist to apply your powerup to your opponent', 1, (64,64,64))
+        #win.blit(text, (50,135))
+        #text = parFont.render('Show your camera an open facing palm to apply to powerup to self ', 1, (64,64,64))
+        #win.blit(text, (50,170))
+
+
+    #To enter the tournament, each wizard must provide proof of magic and basic movement training
+    #Let's start with player 1, move your mouse on screen to select swing direction, and click to lock in angle of swing
+
+
+
+
+    #text = parFont.render('Player 1, move your mouse to select your swing direction, then click to lock the angle', 1, (64,64,64))
+    #win.blit(text, (100,130))
+
+    
 
     # Draw all objects in the level, each object has a specific image and orientation
     for i in objects:
@@ -514,6 +633,12 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
         elif i[4] == 'wall':
             for x in range(i[3] // 64):
                 win.blit(edge, (i[0], i[1] + (64 * x)))
+                #TUTORIAL WALL BLOCKERS
+                #if(tutorial):
+                    #win.blit(edge, (950, 550))
+                    #win.blit(bottom, (950, 550))
+                    #win.blit(bottom, (1010, 550))
+
         elif i[4] == 'laser':
             for x in range(i[3] // 64):
                 win.blit(laser, (i[0], i[1] + (64 * x)))
@@ -523,13 +648,13 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
         elif i[4] == 'coin':
             if i[5]:
                 img = coinImg()
-                win.blit(img, (i[0], i[1]))
+                if(tut_seq == 2):
+                    win.blit(img, (i[0], i[1]))
 
     win.blit(powerMeter, (4, 520))
 
     if line != None and not (shoot): # If we are not in the process of shooting show the angle line
         if(player1_turn):
-
             pygame.draw.line(win, (0, 0, 0), ballStationary, line, 2)
         else:
             pygame.draw.line(win, (0, 0, 0), ballStationary2, line, 2)
@@ -556,7 +681,7 @@ def coinImg():  # Animation for spinning coin, coin acts as currency
     if coinIndex == 8:
         coinIndex = 0
     #print(coinPics[coinIndex])
-    return pygame.image.load(os.path.join('img', 'box.png'))
+    #return pygame.image.load(os.path.join('img', 'box.png'))
     #return "box.png"
 #Old Code 
     return coinPics[coinIndex]
@@ -567,6 +692,8 @@ def powerBar(moving=False, angle=0):
         # Move the arm on the power meter if we've locked the angle
         redrawWindow(ballStationary, ballStationary2, line, False, False)
         pygame.draw.line(win, (255,255,255), (80, winheight -7), (int(80 + round(math.cos(angle) * 60)), int((winheight - (math.sin(angle) * 60)))), 3)
+    
+    
     pygame.display.update()
 
 
@@ -643,10 +770,12 @@ setup(1)
 hover = False
 #**SET STARTING TO TRUE IF WE WANT A START SCREEN**#
 
-starting = False
+starting = True
 while starting:
     pygame.time.delay(10)
     startScreen.mainScreen(hover)
+
+    
     for event in pygame.event.get():
         if event.type == pygame.MOUSEMOTION:
             pos = pygame.mouse.get_pos()
@@ -676,10 +805,11 @@ while starting:
                             surface = startScreen.drawShop(pos, True)
                             win.blit(surface, (0,0))
                             pygame.display.update()
-
+        
         if event.type == pygame.QUIT:
             pygame.quit()
             break
+        
 
 # Game Loop for levels and collision
 while True:
@@ -754,6 +884,19 @@ while True:
                             #print(app.main())  
 
                             #CODE FOR LINKING HAND GESTURE SCRIPT  
+                            #text = parFont.render('Spells can either be applied to yourself or your opponent on their next turn', 1, (64,64,64))
+                            #win.blit(text, (50,100))
+                            #text = parFont.render('Show your camera your hand in a fist to apply your powerup to your opponent', 1, (64,64,64))
+                            #win.blit(text, (50,135))
+                            #text = parFont.render('Show your camera an open facing palm to apply to powerup to self ', 1, (64,64,64))
+                            #win.blit(text, (50,170))
+                            tut_seq = 5
+                            print("here")
+                            redrawWindow(ballStationary, ballStationary2, line, False, False)
+                            pygame.display.update()
+
+
+                            
                             handGesture = app.main()
                             if(handGesture == "open"):
                                 print("Defend")
@@ -767,13 +910,20 @@ while True:
                             if(m_spell == "water"):
                                 print("Audio Linking Successful, Water is the Magic Word")
                                 stickyPower = True
+                                
                                 powerUps -= 1
                                 if(player1_turn):
                                     ballColor = (255,0,255)
                                     powerUpPlayer1 = False
+                                    if(tutorial):
+                                        tut_seq = 6
+                                        print("1...DONE WITH TUTORIAL, RACE TO THE FINISH")
                                 else:
                                     ballColor2 = (255,0,255)
                                     powerUpPlayer2 = False
+                                    if(tutorial):
+                                        tut_seq = 7
+                                        print("2...DONE WITH TUTORIAL, RACE TO THE FINISH")
                                 
                             
                     elif x[3] == 'M':  # 'M' Mullagain, allows you to retry your sot from your previous position, will remove strokes u had on last shot
@@ -807,19 +957,23 @@ while True:
                     loopTime += 1
                     if loopTime == 6:
                         powerAngle -= 0.1 * neg
-                        powerBar(True, powerAngle)
+                        #powerAngle = velocity.getVelocity()
+                        #powerBar(True, powerAngle)
                         loopTime = 0
                         if powerAngle < 0 or powerAngle > math.pi:
                             neg = neg * -1
-                    else:
-                        redrawWindow(ballStationary, ballStationary2, line, False, False)
+                   # else:
+                        #redrawWindow(ballStationary, ballStationary2, line, False, False)
 
 
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
                             pygame.quit()
                         if event.type == pygame.MOUSEBUTTONDOWN:
-                            strokes += 1
+                            if(player1_turn):
+                                strokes_1 += 1
+                            else:
+                                strokes_2 += 1
                             hazard = False
                             if not onGreen():
                                 shoot = True
@@ -835,17 +989,38 @@ while True:
                                 rollVel = power
                             else:
                                 if not superPower:  # Change power if we selected power ball
+                                    m_vel1 = velocity.getVelocity()
+                                    powerBar(True, m_vel1)
+                                    redrawWindow(ballStationary, ballStationary2, line, False, False)
                                     
-                                    power = (math.pi - velocity.getVelocity()) * 30 * 4
+                                    time_mod.sleep(1.5)
+                                    
+                                    power = (math.pi - m_vel1) * 30 * 4
                                 else:
-                                    
-                                    power = (math.pi - velocity.getVelocity()) * 40 * 4
+                                    m_vel1 = velocity.getVelocity()
+                                    powerBar(True, m_vel1)
+                                    redrawWindow(ballStationary, ballStationary2, line, False, False)
+
+                                    time_mod.sleep(1.5)
+
+                                    power = (math.pi - m_vel1) * 40 * 4
 
                             if(player1_turn):
                                 shootPos = ballStationary
                             else:
                                 shootPos = ballStationary2
+                            
                             powerLock = True
+                            if(tutorial and tut_seq < 2):
+                                tut_seq += 1
+                                print(tut_seq)
+
+                            #powerBar(True, 1.5)
+                            #redrawWindow(ballStationary, ballStationary2, line, False, False)
+
+                
+                    
+
                             #Good Place to Switch Turns
                             #if(player1_turn):
                                 #player1_turn = False
@@ -962,15 +1137,21 @@ while True:
             for i in objects:  # for every object in the level
                 if i[4] == 'coin':  # If the ball hits a coin
                     if i[5]:
-
-                        if ballCords[0] < i[0] + i[2] and ballCords[0] > i[0] and ballCords[1] > i[1] and ballCords[1] < i[1] + i[3]:
-                            courses.coinHit(level - 1)
-                            coins += 1
-                            print("HIT COIN")
-                            if(player1_turn):
-                                powerUpPlayer1 = True
-                            if(player1_turn == False):
-                                powerUpPlayer2 = True
+                        if(tutorial == False or tut_seq > 1 ):
+                            if ballCords[0] < i[0] + i[2] and ballCords[0] > i[0] and ballCords[1] > i[1] and ballCords[1] < i[1] + i[3]:
+                                courses.coinHit(level - 1)
+                                coins += 1
+                                print("HIT COIN")
+                                if(player1_turn):
+                                    tut_seq = 3
+                                    powerUpPlayer1 = True
+                                    if(tutorial):
+                                        powerUpPlayer2 = True
+                                if(player1_turn == False):
+                                    tut_seq = 4
+                                    powerUpPlayer2 = True
+                                    if(tutorial):
+                                        powerUpPlayer1 = True
 
                 if i[4] == 'laser':  # if the ball hits the laser hazard
                     if ballCords[0] > i[0] and ballCords[0] < i[0] + i[2] and ballCords[1] > i[1] and ballCords[1] < i[1] + i[3]:
@@ -1293,6 +1474,8 @@ while True:
                 displayScore(strokes, par)
 
             strokes = 0
+            strokes_1 = 0
+            strokes_2 = 0
 
     if onGreen():
         if ballStationary[0] > flagx:

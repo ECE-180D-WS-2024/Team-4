@@ -2,7 +2,7 @@ winheight = 600
 winwidth = 1080
 
 #LVL1 is the most basic game implementation (a lvl with no obstacles, powerups, and only a green/flag)
-lvl1 = [[0, -8, 1200, 24, 'floor'], [0, winheight - 8, 1200, 100, 'floor'], [-8, 0, 16, winheight + 100, 'wall'], [winwidth - 8, 0, 16, winheight + 100, 'wall'], [880, 1200, 64, 8, 'floor'],[470, 300, 32, 32, 'coin', True],[1006, winheight - 68, 64, 64, 'flag'], [5, (180, winheight - 12)]]
+lvl1 = [[950, 500, 200, 24, 'floor'], [0, -8, 1200, 24, 'floor'], [0, winheight - 8, 1200, 100, 'floor'], [-8, 0, 16, winheight + 100, 'wall'], [winwidth - 8, 0, 16, winheight + 100, 'wall'],[950, 500, 16, 128, 'wall'], [880, 1200, 64, 8, 'floor'],[470, 300, 32, 32, 'coin', True],[1006, winheight - 68, 64, 64, 'flag'], [5, (180, winheight - 12)]]
 lvl2 = [[0, -8, 1200, 24, 'floor'], [968, winheight - 8, 300, 16, 'floor'], [-8, 0, 16, winheight + 100, 'wall'], [-40, winheight - 8, 900, 16, 'floor'], [128, winheight - 128, 16, 128, 'wall'], [144, winheight - 38, 704, 32, 'water'], [420, 350, 128, 64, 'sand'], [470, 300, 32, 32, 'coin', True], [winwidth - 8, 0, 16, winheight + 100, 'wall'], [848, 300, 16, 500, 'wall'], [864, 364, 128, 16, 'floor'], [992, 300, 16, 192, 'wall'], [864, 332, 128, 32, 'water'], [860, winheight - 8, 128, 8, 'green'], [900, winheight - 68, 64, 64, 'flag'],[4, (50, winheight - 12)]]
 lvl3 = [[0, 100, 128, 16, 'floor'], [500, winheight - 8, 192, 8, 'green'], [600, winheight-68, 64, 64, 'flag'], [590, 400, 32, 32, 'coin', True], [-8, -400, 16, winheight + 500, 'wall'],[484, winheight - 128, 16, 128, 'wall'], [692, winheight - 128, 16, 128, 'wall'], [708, winheight - 38, 128, 32, 'water'], [winwidth - 8, 0, 16, winheight + 100, 'wall'], [356, winheight - 38, 128, 32, 'water'], [-12, winheight-8, 512, 16, 'floor'], [708, winheight - 8, 600, 32, 'floor'], [836, winheight-64, 500, 64, 'sand'], [-28, winheight-64, 400, 64, 'sand'], [3, (50, 95)]]
 lvl4 = [[0, winheight - 8, winwidth + 64, 100, 'floor'], [550, 300, 32, 32, 'coin', True], [0, winheight - 40, 1200, 32, 'water'], [50, 450, 128, 16, 'floor'], [-8, 0, 16, winheight + 100, 'wall'], [winwidth - 128, 450, 128, 8, "green"], [winwidth - 128, 458, 128, 16, "floor"], [winwidth-80, 388, 64, 64, 'flag'], [winwidth - 8, 0, 16, winheight + 100, 'wall'], [3, (120, 446)]]
@@ -13,6 +13,7 @@ lvl8 = [[400, 560, 800, 32, 'water'], [0, winheight - 8, winwidth + 64, 100, 'fl
 lvl9 = [[0, winheight-36, 1200, 32, 'water'], [-8,0,16, 700, 'wall'], [winwidth-8, 0, 16, 700, 'wall'], [0, -8, 1200, 16, 'floor'], [0,winheight-8,1200, 16, 'floor'], [0, 500, 128, 16, 'floor'], [350, 375, 128, 64, 'sand'],[700, 250, 64, 64, 'sand'], [winwidth -198, 150, 200, 8, 'green'], [winwidth -198, 158, 200, 8, 'floor'],[550, 230, 32, 32, 'coin', True],[winwidth-80, 90, 64, 64, 'flag'], [5, (64, 496)]]
 course1 = [lvl1, lvl1, lvl1, lvl1, lvl1, lvl1, lvl1, lvl1, lvl1]
 #course1 = [lvl1]
+
 
 def getLvl(n=1):
     return course1[n - 1][:-1]

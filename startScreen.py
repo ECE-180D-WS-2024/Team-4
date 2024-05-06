@@ -8,13 +8,19 @@ pygame.init()
 
 win = pygame.display.set_mode((1080, 600))
 title = pygame.image.load(os.path.join('img', 'title.png'))
-back = pygame.image.load(os.path.join('img', 'back.png'))
-course = pygame.image.load(os.path.join('img', 'course1.png'))
-course1 = pygame.transform.scale(course, (200, 200))
+back = pygame.image.load(os.path.join('img', 'titlescreen2.png'))
+back1 = pygame.transform.scale(back, (1080, 600))
+
+back_blue = pygame.image.load(os.path.join('img', 'newattempt.png'))
+back_blue2 = pygame.transform.scale(back_blue, (205, 40))
+
+
+course = pygame.image.load(os.path.join('img', 'newgame.png'))
+course1 = pygame.transform.scale(course, (50, 50))
 
 font = pygame.font.SysFont('comicsansms', 24)
 
-buttons = [[1080/2 - course1.get_width()/2, 260, course1.get_width(), course1.get_height(), 'Grassy Land']]
+buttons = [[1080/2 - course1.get_width()/2, 260, course1.get_width(), course1.get_height(), '']]
 shopButton = []
 ballObjects = []
 surfaces = []
@@ -148,7 +154,7 @@ def drawShop(pos=None, click=False):
             c = c + 1
     
     surf = pygame.Surface((1080, 600))
-    surf.blit(back,(0,0))
+    surf.blit(back1,(0,0))
     backButton = font.render('<-- Back', 1, (135,206,250))
     surf.blit(backButton, (10, 560))
     text = font.render('Coins: ' + getCoins(), 1, (51,51,153))
@@ -207,27 +213,46 @@ def mainScreen(hover=False):
     surf = pygame.Surface((1080, 600))
     w = title.get_width()
     h = title.get_height()
-    surf.blit(back, (0,0))
-    surf.blit(title, ((1080/2 - (w/2)), 50))
+   #surf.blit(back_blue2, (0,0))
+    surf.blit(back1, (0,0))
+
+    #surf.blit(title, ((1080/2 - (w/2)), 50))
     # For Shop Button
     if hover == True:
         text = font.render('Ball Shop', 1,(0, 0, 0))
     else:
         text = font.render('Ball Shop', 1, (51, 51, 153))
-    surf.blit(text, (960, 12))
+    #surf.blit(text, (960, 12))
     shopButton = text.get_rect()
     shopButton[0] = 960
     shopButton[1] = 12
     # For course Button
     i = buttons[0]
-    surf.blit(course1, (i[0], i[1]))
-    text = font.render(i[4], 1, (51,51,153))
-    surf.blit(text, (i[0] + ((i[3] - text.get_width())/2), i[1] + i[3] + 10))
-    text = font.render('Best: ' + getBest(), 1, (51, 51, 153))
-    surf.blit(text, (i[0] + ((i[3] - text.get_width())/2), i[1] + i[3] + 40))
-    text = font.render('Coins: ' + getCoins(), 1, (51,51,153))
-    surf.blit(text, (10, 10))
+
+    surf.blit(back_blue2, (i[0], i[1]))
+
+
+    text = font.render('Start Tournament', 1, (255, 222, 0))
+    surf.blit(text, (i[0], i[1]))
+
+
+
     
+
+    text = font.render(i[4], 1, (51,51,153))
+    
+    surf.blit(text, (i[0] + ((i[3] - text.get_width())/2), i[1] + i[3] + 10))
+    #text = font.render('Best: ' + getBest(), 1, (51, 51, 153))
+    #surf.blit(text, (i[0] + ((i[3] - text.get_width())/2), i[1] + i[3] + 40))
+    #text = font.render('Coins: ' + getCoins(), 1, (51,51,153))
+    #surf.blit(text, (10, 10))
+
+
+    #DRAW TEXT
+    #text = font.render('Welcome Wizards to Samuelia', 1, (51, 51, 153))
+    #surf.blit(text, (10, 10))
+
+
     win.blit(surf, (0,0))
     pygame.display.update()
 
@@ -239,13 +264,13 @@ def mouseOver(larger=False):
         buttons[0][1] = 220
         buttons[0][2] = 250
         buttons[0][3] = 250
-        course1 = pygame.transform.scale(course, (250, 250))
+        course1 = pygame.transform.scale(course, (150, 150))
     else:
         buttons[0][1] = 240
         buttons[0][0] = 440
         buttons[0][2] = 200
         buttons[0][3] = 200
-        course1 = pygame.transform.scale(course, (200, 200))
+        course1 = pygame.transform.scale(course, (100, 100))
     mainScreen()
 
 
@@ -254,7 +279,8 @@ def shopClick(pos):
     i = shopButton
     if pos[0] > i[0] and pos[0] < i[0] + i[2]:
         if pos[1] > i[1] and pos[1] < i[1] + i[3]:
-            return True
+            #if we want a valid shop in the game
+            return False
     return False
 
 
