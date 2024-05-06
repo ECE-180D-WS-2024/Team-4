@@ -28,7 +28,8 @@ def getVelocity():
     #print(scaled_velocity)
     
     #TESTING
-    scaled_velocity = 2.1
+    #Velocity can be from 0 to pi
+    scaled_velocity = 2.3
     print(scaled_velocity)
     return scaled_velocity
 
@@ -103,9 +104,9 @@ def run():
         #perhaps future tests could establish something else
         #print(1)
         #Can i go lower?
-        time.sleep(1)
+        time.sleep(0.5)
         #in class latency of 3!!! while on hotspot seems like the sweet spot
-        time.sleep(3)
+        #time.sleep(0)
         #decoded_payload = message.payload.decode('utf-8')
         break
         
