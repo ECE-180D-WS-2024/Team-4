@@ -5,6 +5,7 @@ from PIL import Image, ImageQt
 import sys
 import io
 
+<<<<<<< HEAD
 def receive_screen(ip, port):
     app = QApplication(sys.argv)
     window = QMainWindow()  # Create a main window
@@ -12,6 +13,10 @@ def receive_screen(ip, port):
     label = QLabel(window)  # Set label on the window
     window.setCentralWidget(label)
     window.showMaximized()  # Maximize the window to show the entire screen
+=======
+#private ip address, port
+receiver = StreamingServer('172.20.10.6', 9999)
+>>>>>>> aeba35034ef4593a05d70268369d36723c0c8460
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((ip, port))

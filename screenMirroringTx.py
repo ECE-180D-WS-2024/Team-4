@@ -6,6 +6,7 @@ import Quartz.CoreGraphics as CG
 from AppKit import NSBitmapImageRep, NSJPEGFileType
 from PIL import Image
 
+<<<<<<< HEAD
 def capture_window(title):
     window_list = CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID)
     for window in window_list:
@@ -18,6 +19,10 @@ def capture_window(title):
             bitmap_rep = NSBitmapImageRep.alloc().initWithCGImage_(image)
             data = bitmap_rep.representationUsingType_properties_(NSJPEGFileType, None)
             return data
+=======
+#private ip address, port
+sender = ScreenShareClient('172.20.10.6', 9999)
+>>>>>>> aeba35034ef4593a05d70268369d36723c0c8460
 
 def send_screen(ip, port, window_title):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
