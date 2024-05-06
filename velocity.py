@@ -104,7 +104,7 @@ def run():
         #perhaps future tests could establish something else
         #print(1)
         #Can i go lower?
-        time.sleep(0.5)
+        #time.sleep(0.5)
         #in class latency of 3!!! while on hotspot seems like the sweet spot
         #time.sleep(0)
         #decoded_payload = message.payload.decode('utf-8')

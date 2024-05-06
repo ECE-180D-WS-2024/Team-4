@@ -111,8 +111,10 @@ handGesture = "none"
 player1_turn = True
 
 tutorial = True
+#set tut_seq to zero if we want to have full turoital
 tut_seq = 0
-
+spell_seq = 0
+hole_seq = 0
 
 # LOAD MUSIC
 if SOUND:
@@ -391,19 +393,23 @@ def setup(level):  # Setup objects for the level from module courses
 
 
 def fade():  # Fade out screen when player gets ball in hole
-    fade = pygame.Surface((winwidth, winheight))
-    fade.fill((0,0,0))
-    for alpha in range(0, 300):
-        fade.set_alpha(alpha)
-        redrawWindow(ballStationary, None, False, False)
-        win.blit(fade, (0,0))
-        pygame.display.update()
-        pygame.time.delay(1)
+    print("Get In")
+    global hole_seq
+    if(hole_seq == 2):
+        hole_seq = 0
+        fade = pygame.Surface((winwidth, winheight))
+        fade.fill((0,0,0))
+        for alpha in range(0, 300):
+            fade.set_alpha(alpha)
+            redrawWindow(ballStationary, ballStationary2, None, False, False)
+            win.blit(fade, (0,0))
+            pygame.display.update()
+            pygame.time.delay(1)
 
 
 def showScore():  # Display the score from class scoreSheet
     global level
-    sleep(2)
+    #sleep(2)
     level += 1
     sheet.drawSheet(strokes)
     pygame.display.update()
@@ -528,6 +534,7 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
     #I have competed before or, first tournament if statement
     if(tutorial):
 
+        #Tutorial Dialogue Sequence
         if(tut_seq == 0):
             text = parFont.render('Welcome to the 89,575th annual golf wizarding tournament!', 1, (64,64,64))
             win.blit(text, (50,100))
@@ -564,7 +571,7 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
             win.blit(text, (50,135))
             text = parFont.render('Casting is a two step process, so listen carefully!', 1, (64,64,64))
             win.blit(text, (50,170)) 
-            text = parFont.render('Click the spell icon (top right) to initiate casting!', 1, (64,64,64))
+            text = parFont.render('Click the spell icon (top right) to initiate casting.', 1, (64,64,64))
             win.blit(text, (50,205)) 
         if(tut_seq == 4):
             text = parFont.render('Wizard 2, congrats on collecting the charm first!', 1, (64,64,64))
@@ -573,7 +580,7 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
             win.blit(text, (50,135))
             text = parFont.render('Casting is a two step process, so listen carefully!', 1, (64,64,64))
             win.blit(text, (50,170)) 
-            text = parFont.render('Click the spell icon (top right) to initiate casting!', 1, (64,64,64))
+            text = parFont.render('Click the spell icon (top right) to initiate casting.', 1, (64,64,64))
             win.blit(text, (50,205)) 
         if(tut_seq == 5):
             text = parFont.render('As per sorcerers guidelines, spells must be cast at start of each turn', 1, (64,64,64))
@@ -583,6 +590,40 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
             text = parFont.render('Raise your hand in a fist to apply your powerup to your opponent', 1, (64,64,64))
             win.blit(text, (50,170))
             text = parFont.render('Raise an open facing palm to apply to powerup to self ', 1, (64,64,64))
+            win.blit(text, (50,205))
+        if(tut_seq == 6):
+            text = parFont.render('Now speak (into mic) your casting phrase!!', 1, (64,64,64))
+            win.blit(text, (50,100))
+            text = parFont.render('Player 1 Casting Phrase: Water', 1, (64,64,64))
+            win.blit(text, (50,135))
+            text = parFont.render('Player 2 Casting Phrase: Fire', 1, (64,64,64))
+            win.blit(text, (50,170))
+            text = parFont.render('Speech precision is crucial to a successful casting....', 1, (64,64,64))
+            win.blit(text, (50,205))
+        if(tut_seq == 7):
+            text = parFont.render('Congrats on your spell casting player 1!', 1, (64,64,64))
+            win.blit(text, (50,100))
+            text = parFont.render('The spells within the charms are random, so be careful.....', 1, (64,64,64))
+            win.blit(text, (50,135))
+            text = parFont.render('Wait for player 2 to prove they are worthy of competition', 1, (64,64,64))
+            win.blit(text, (50,170))
+            
+        if(tut_seq == 8):
+            text = parFont.render('Congrats on your spell casting player 2!', 1, (64,64,64))
+            win.blit(text, (50,100))
+            text = parFont.render('The spells within the charms are random, so be careful.....', 1, (64,64,64))
+            win.blit(text, (50,135))
+            text = parFont.render('Wait for player 1 to prove they are worthy of competition', 1, (64,64,64))
+            win.blit(text, (50,170))
+           
+        if(tut_seq == 9):
+            text = parFont.render('Get in the hole to begin the tournament.', 1, (64,64,64))
+            win.blit(text, (50,100))
+            text = parFont.render('The player with the lowest stroke count wins the hole!', 1, (64,64,64))
+            win.blit(text, (50,135))
+            text = parFont.render('The player with the most won holes wins the tournament!', 1, (64,64,64))
+            win.blit(text, (50,170))
+            text = parFont.render('May the luck of Samuelia rest in you both....good luck', 1, (64,64,64))
             win.blit(text, (50,205))
 
 
@@ -626,13 +667,16 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
             flagx = i[0]
         elif i[4] == 'floor':
             for x in range(i[2] // 64):
-                win.blit(bottom, (i[0] + 64 * x, i[1]))
+                if(i[0] != 950 or tut_seq != 9):
+                    win.blit(bottom, (i[0] + 64 * x, i[1]))
         elif i[4] == 'green':
             for x in range(i[2] // 64):
                 win.blit(green, (i[0] + (64 * x), i[1]))
         elif i[4] == 'wall':
             for x in range(i[3] // 64):
-                win.blit(edge, (i[0], i[1] + (64 * x)))
+                if(i[0] != 950 or tut_seq != 9):
+                    win.blit(edge, (i[0], i[1] + (64 * x)))
+                
                 #TUTORIAL WALL BLOCKERS
                 #if(tutorial):
                     #win.blit(edge, (950, 550))
@@ -728,16 +772,26 @@ def onGreen():  # Determine if we are on the green
 
     for i in objects:
         if i[4] == 'green':
-            if ballStationary[1] < i[1] + i[3] and ballStationary[1] > i[1] - 20 and ballStationary[0] > i[0] and ballStationary[0] < i[0] + i[2]:
-                return True
+            if(player1_turn):
+                if ballStationary[1] < i[1] + i[3] and ballStationary[1] > i[1] - 20 and ballStationary[0] > i[0] and ballStationary[0] < i[0] + i[2]:
+                    return True
+                else:
+                    return False
             else:
-                return False
+                if ballStationary2[1] < i[1] + i[3] and ballStationary2[1] > i[1] - 20 and ballStationary2[0] > i[0] and ballStationary2[0] < i[0] + i[2]:
+                    return True
+                else:
+                    return False
 
 
 def overHole(x,y):  # Determine if we are over top of the hole
     if x > hole[0] - 6 and x < hole[0] + 6:
         if y > hole[1] - 13 and y < hole[1] + 10:
-            return True
+            if((tutorial == True and tut_seq == 9) or tutorial == False):
+                
+                return True
+            else: 
+                return False
         else:
             return False
     else:
@@ -891,7 +945,6 @@ while True:
                             #text = parFont.render('Show your camera an open facing palm to apply to powerup to self ', 1, (64,64,64))
                             #win.blit(text, (50,170))
                             tut_seq = 5
-                            print("here")
                             redrawWindow(ballStationary, ballStationary2, line, False, False)
                             pygame.display.update()
 
@@ -903,9 +956,15 @@ while True:
                                 
                             elif(handGesture == "close"):
                                 print("Attack")
+
+                            tut_seq = 6
+                            redrawWindow(ballStationary, ballStationary2, line, False, False)
+                            pygame.display.update()
                                 
                             m_spell = audio.spellCast()
                             print(m_spell)
+
+                            
 
                             if(m_spell == "water"):
                                 print("Audio Linking Successful, Water is the Magic Word")
@@ -916,14 +975,31 @@ while True:
                                     ballColor = (255,0,255)
                                     powerUpPlayer1 = False
                                     if(tutorial):
-                                        tut_seq = 6
+                                        #tut_seq = 7
                                         print("1...DONE WITH TUTORIAL, RACE TO THE FINISH")
+                                        tut_seq = 7
+                                        spell_seq += 1
+                                        if(spell_seq == 2):
+                                            tut_seq = 9
+
+                                        redrawWindow(ballStationary, ballStationary2, line, False, False)
+                                        pygame.display.update()
                                 else:
                                     ballColor2 = (255,0,255)
                                     powerUpPlayer2 = False
                                     if(tutorial):
-                                        tut_seq = 7
+                                        tut_seq = 8
+                                        spell_seq += 1
+                                        if(spell_seq == 2):
+                                            tut_seq = 9
+
+                                        redrawWindow(ballStationary, ballStationary2, line, False, False)
+                                        pygame.display.update()
                                         print("2...DONE WITH TUTORIAL, RACE TO THE FINISH")
+                            else:
+                                tut_seq = 4
+                                redrawWindow(ballStationary, ballStationary2, line, False, False)
+                                pygame.display.update()
                                 
                             
                     elif x[3] == 'M':  # 'M' Mullagain, allows you to retry your sot from your previous position, will remove strokes u had on last shot
@@ -993,7 +1069,7 @@ while True:
                                     powerBar(True, m_vel1)
                                     redrawWindow(ballStationary, ballStationary2, line, False, False)
                                     
-                                    time_mod.sleep(1.5)
+                                    #time_mod.sleep(1.5)
                                     
                                     power = (math.pi - m_vel1) * 30 * 4
                                 else:
@@ -1001,7 +1077,7 @@ while True:
                                     powerBar(True, m_vel1)
                                     redrawWindow(ballStationary, ballStationary2, line, False, False)
 
-                                    time_mod.sleep(1.5)
+                                    #time_mod.sleep(1.5)
 
                                     power = (math.pi - m_vel1) * 40 * 4
 
@@ -1038,74 +1114,171 @@ while True:
                 line = (round(ballStationary2[0] + (math.cos(angle) * 50)), round(ballStationary2[1] - (math.sin(angle) * 50)))
 
             if onGreen():  # If we are on green have the angle lin point towards the hole, bc putter cannot chip
-                if ballStationary[0] > flagx:
-                    angle = math.pi
-                    line = (ballStationary[0] - 30, ballStationary[1])
-                else:
-                    angle = 0
-                    line = (ballStationary[0] + 30, ballStationary[1])
-
-    redrawWindow(ballStationary, ballStationary2, line)
-    hitting = False
-
-    while put and not shoot:  # If we are putting
-        # If we aren't in the hole
-        if not(overHole(ballStationary[0], ballStationary[1])):
-            pygame.time.delay(20)
-            rollVel -= 0.5  # Slow down the ball gradually
-            if angle == math.pi:
-                ballStationary = (round(ballStationary[0] - rollVel), ballStationary[1])
-            else:
-                ballStationary = (round(ballStationary[0] + rollVel), ballStationary[1])
-            redrawWindow(ballStationary, ballStationary2, None, True)
-
-            if rollVel < 0.5:  # Stop moving ball if power is low enough
-                time = 0
-                put = False
-                pos = pygame.mouse.get_pos()
-                angle = findAngle(pos)
-                line = (round(ballStationary[0] + (math.cos(angle) * 50)), round(ballStationary[1] - (math.sin(angle) * 50)))
-
-                #Determine what way to point the angle line
-                if onGreen():
+                if(player1_turn):
                     if ballStationary[0] > flagx:
                         angle = math.pi
                         line = (ballStationary[0] - 30, ballStationary[1])
                     else:
                         angle = 0
                         line = (ballStationary[0] + 30, ballStationary[1])
-        else:
-            # We have got the ball in the hole
-            if SOUND:
-                inHole.play()
-            while True:  # Move ball so it looks like it goes into the hole (increase y value)
-                pygame.time.delay(20)
-                redrawWindow(ballStationary, ballStationary2, None, True)
-                ballStationary = (ballStationary[0], ballStationary[1] + 1)
-                if ballStationary[0] > hole[0]:
-                    ballStationary = (ballStationary[0] - 1, ballStationary[1])
                 else:
-                    ballStationary = (ballStationary[0] + 1, ballStationary[1])
+                    if ballStationary2[0] > flagx:
+                        angle = math.pi
+                        line = (ballStationary2[0] - 30, ballStationary2[1])
+                    else:
+                        angle = 0
+                        line = (ballStationary2[0] + 30, ballStationary2[1])
 
-                if ballStationary[1] > hole[1] + 5:
+    redrawWindow(ballStationary, ballStationary2, line)
+    hitting = False
+
+    while put and not shoot:  # If we are putting
+        # If we aren't in the hole
+
+        if(player1_turn):
+            if(  not(overHole(ballStationary[0], ballStationary[1]))  ):
+                pygame.time.delay(20)
+                rollVel -= 0.5  # Slow down the ball gradually
+                if angle == math.pi:
+                    ballStationary = (round(ballStationary[0] - rollVel), ballStationary[1])
+                else:
+                    ballStationary = (round(ballStationary[0] + rollVel), ballStationary[1])
+                redrawWindow(ballStationary, ballStationary2, None, True)
+                if rollVel < 0.5:  # Stop moving ball if power is low enough
+                    
+                    time = 0
                     put = False
+                    pos = pygame.mouse.get_pos()
+                    angle = findAngle(pos)
+                    line = (round(ballStationary[0] + (math.cos(angle) * 50)), round(ballStationary[1] - (math.sin(angle) * 50)))
+
+                    #Determine what way to point the angle line
+                    if onGreen():
+                        if ballStationary[0] > flagx:
+                            angle = math.pi
+                            line = (ballStationary[0] - 30, ballStationary[1])
+                        else:
+                            angle = 0
+                            line = (ballStationary[0] + 30, ballStationary[1])
+                    
+
+                    if(player1_turn and hole_seq == 0):
+                            print("1")
+                            player1_turn = False
+                    elif(player1_turn == False and hole_seq == 0):
+                        print("2")
+                        player1_turn = True
                     break
-
-            # Advance to score board
-            fade()
-            if strokes == 1:
-                holeInOne()
             else:
-                displayScore(strokes, par)
+                tutorial = False
+                #player1_turn = False
 
-            strokes = 0
+                hole_seq += 1
+                print("hole seq 1")
+                player1_turn = False
 
+                if SOUND:
+                    inHole.play()
+                while True:  # Move ball so it looks like it goes into the hole (increase y value)
+                    pygame.time.delay(20)
+                    redrawWindow(ballStationary, ballStationary2, None, True)
+                    ballStationary = (ballStationary[0], ballStationary[1] + 1)
+                    if ballStationary[0] > hole[0]:
+                        ballStationary = (ballStationary[0] - 1, ballStationary[1])
+                    else:
+                        ballStationary = (ballStationary[0] + 1, ballStationary[1])
+
+                    if ballStationary[1] > hole[1] + 5:
+                        put = False
+                        break
+
+                # Advance to score board
+                fade()
+                '''
+                if strokes == 1:
+                    holeInOne()
+                else:
+                    displayScore(strokes, par)
+                '''
+                strokes = 0
+        else:
+            if(  not(overHole(ballStationary2[0], ballStationary2[1]))  ):
+                pygame.time.delay(20)
+                rollVel -= 0.5  # Slow down the ball gradually
+                if angle == math.pi:
+                    ballStationary2 = (round(ballStationary2[0] - rollVel), ballStationary2[1])
+                else:
+                    ballStationary2 = (round(ballStationary2[0] + rollVel), ballStationary2[1])
+                redrawWindow(ballStationary, ballStationary2, None, True)
+                if rollVel < 0.5:  # Stop moving ball if power is low enough
+                    
+                    time = 0
+                    put = False
+                    pos = pygame.mouse.get_pos()
+                    angle = findAngle(pos)
+                    line = (round(ballStationary2[0] + (math.cos(angle) * 50)), round(ballStationary2[1] - (math.sin(angle) * 50)))
+
+                    #Determine what way to point the angle line
+                    if onGreen():
+                        if ballStationary2[0] > flagx:
+                            angle = math.pi
+                            line = (ballStationary2[0] - 30, ballStationary2[1])
+                        else:
+                            angle = 0
+                            line = (ballStationary2[0] + 30, ballStationary2[1])
+                    
+
+                    if(player1_turn and hole_seq == 0):
+                            print("1")
+                            player1_turn = False
+                    elif(player1_turn == False and hole_seq == 0):
+                        print("2")
+                        player1_turn = True
+                    break
+            else:
+                tutorial = False
+                #player1_turn = False
+
+                hole_seq += 1
+                print("hole seq 2")
+                player1_turn = True
+
+                if SOUND:
+                    inHole.play()
+                while True:  # Move ball so it looks like it goes into the hole (increase y value)
+                    pygame.time.delay(20)
+                    redrawWindow(ballStationary, ballStationary2, None, True)
+                    ballStationary2 = (ballStationary2[0], ballStationary2[1] + 1)
+                    if ballStationary2[0] > hole[0]:
+                        ballStationary2 = (ballStationary2[0] - 1, ballStationary2[1])
+                    else:
+                        ballStationary2 = (ballStationary2[0] + 1, ballStationary2[1])
+
+                    if ballStationary2[1] > hole[1] + 5:
+                        put = False
+                        break
+
+                # Advance to score board
+                fade()
+                '''
+                if strokes == 1:
+                    holeInOne()
+                else:
+                    displayScore(strokes, par)
+                '''
+                strokes = 0
+
+
+
+
+
+      
+    #Implement Shooting into the hole? Make sure this works
     while shoot:  # If we are shooting the ball
-        if not(overHole(ballStationary[0], ballStationary[1])):  # If we aren't in the hole
+        #PLAYER2 IN HOLE
+        if (overHole(ballStationary[0], ballStationary[1]) == False and overHole(ballStationary2[0], ballStationary2[1]) == False):  # If we aren't in the hole
             maxT = physics.maxTime(power, angle)
             time += 0.085
-            
-            
             #ballCords = physics.ballPath(ballStationary2[0], ballStationary2[1], power, angle, time)
 
             
@@ -1218,6 +1391,7 @@ while True:
                         break
 
                 elif i[4] != 'flag' and i[4] != 'coin':
+                    
                     if ballCords[1] > i[1] - 2 and ballCords[1] < i[1] + 7 and ballCords[0] < i[0] + i[2] and ballCords[0] > i[0]:
                         hitting = False
                         #THIS IS THE COLLISION LOOP FOR THE GROUND
@@ -1245,6 +1419,8 @@ while True:
                         while True:
                             subtract += 1
                             if ballCords[1] - subtract < i[1]:
+                                
+                                
                                 ballCords = (ballCords[0], ballCords[1] - subtract)
                                 break
 
@@ -1259,6 +1435,7 @@ while True:
                             while True:
                                 subtract += 1
                                 if ballCords[1] - subtract < i[1] - 4:
+                                    
                                     ballCords = (ballCords[0], ballCords[1] - subtract)
                                     power = 0
                                     break
@@ -1268,6 +1445,7 @@ while True:
                             while True:
                                 subtract += 1
                                 if ballCords[1] - subtract < i[1] - 4:
+                                    
                                     ballCords = (ballCords[0], ballCords[1] - subtract)
                                     power = 0
                                     break
@@ -1319,6 +1497,7 @@ while True:
                         while True:
                             subtract += 1
                             if ballCords[0] - subtract < i[0] - 3:
+                                
                                 ballCords = (ballCords[0] - subtract, ballCords[1])
                                 break
                         if(player1_turn):
@@ -1331,6 +1510,7 @@ while True:
                             while True:
                                 subtract += 1
                                 if ballCords[0] - subtract < i[0] - 3:
+                                    
                                     ballCords = (ballCords[0] - subtract, ballCords[1])
                                     power = 0
                                     break
@@ -1359,6 +1539,7 @@ while True:
                         while True:
                             subtract += 1
                             if ballCords[0] + subtract > i[0] + i[2] + 4:
+                                
                                 ballCords = (ballCords[0] + subtract, ballCords[1])
                                 break
                         if(player1_turn):
@@ -1371,6 +1552,7 @@ while True:
                             while True:
                                 subtract += 1
                                 if ballCords[0] + subtract > i[0] + i[2] + 4:
+                                    
                                     ballCords = (ballCords[0] + subtract, ballCords[1])
                                     power = 0
                                     break
@@ -1397,6 +1579,7 @@ while True:
                         while True:
                             subtract += 1
                             if ballCords[1] + subtract > i[1] + i[3] + 8:
+                                
                                 ballCords = (ballCords[0], ballCords[1] + subtract)
                                 break
 
@@ -1406,6 +1589,7 @@ while True:
                             while True:
                                 subtract += 1
                                 if ballCords[0] + subtract > i[1] + i[3] + 4:
+                                    
                                     ballCords = (ballCords[0], ballCords[1] + subtract)
                                     power = 0
                                     break
@@ -1451,39 +1635,82 @@ while True:
                         
 
         else:
-            if SOUND:
-                inHole.play()
-            var = True
-            while var:
-                pygame.time.delay(20)
-                redrawWindow(ballStationary, ballStationary2, None, True)
-                ballStationary = (ballStationary[0], ballStationary[1] + 1)
-                if ballStationary[0] > hole[0]:
-                    ballStationary = (ballStationary[0] - 1, ballStationary[1])
+            if(player1_turn):
+                tutorial = False
+                player1_turn = False
+                if SOUND:
+                    inHole.play()
+                var = True
+                while var:
+                    pygame.time.delay(20)
+                    redrawWindow(ballStationary, ballStationary2, None, True)
+                    ballStationary = (ballStationary[0], ballStationary[1] + 1)
+                    if ballStationary[0] > hole[0]:
+                        ballStationary = (ballStationary[0] - 1, ballStationary[1])
+                    else:
+                        ballStationary = (ballStationary[0] + 1, ballStationary[1])
+
+                    if ballStationary[1] > hole[1] + 5:
+                        shoot = False
+                        var = False
+
+                fade()
+                if strokes == 1:
+                    holeInOne()
                 else:
-                    ballStationary = (ballStationary[0] + 1, ballStationary[1])
+                    displayScore(strokes, par)
 
-                if ballStationary[1] > hole[1] + 5:
-                    shoot = False
-                    var = False
-
-            fade()
-            if strokes == 1:
-                holeInOne()
+                strokes = 0
+                strokes_1 = 0
+                strokes_2 = 0
             else:
-                displayScore(strokes, par)
+                tutorial = False
+                player1_turn = True
+                if SOUND:
+                    inHole.play()
+                var = True
+                while var:
+                    pygame.time.delay(20)
+                    redrawWindow(ballStationary, ballStationary2, None, True)
+                    ballStationary2 = (ballStationary2[0], ballStationary2[1] + 1)
+                    if ballStationary[0] > hole[0]:
+                        ballStationary2 = (ballStationary2[0] - 1, ballStationary2[1])
+                    else:
+                        ballStationary = (ballStationary2[0] + 1, ballStationary2[1])
 
-            strokes = 0
-            strokes_1 = 0
-            strokes_2 = 0
+                    if ballStationary2[1] > hole[1] + 5:
+                        shoot = False
+                        var = False
+
+                #if()
+
+                fade()
+                if strokes == 1:
+                    holeInOne()
+                else:
+                    displayScore(strokes, par)
+
+                strokes = 0
+                strokes_1 = 0
+                strokes_2 = 0
+           
+            
 
     if onGreen():
-        if ballStationary[0] > flagx:
-            angle = math.pi
-            line = (ballStationary[0] - 30, ballStationary[1])
+        if(player1_turn):
+            if ballStationary[0] > flagx:
+                angle = math.pi
+                line = (ballStationary[0] - 30, ballStationary[1])
+            else:
+                angle = 0
+                line = (ballStationary[0] + 30, ballStationary[1])
         else:
-            angle = 0
-            line = (ballStationary[0] + 30, ballStationary[1])
+            if ballStationary2[0] > flagx:
+                angle = math.pi
+                line = (ballStationary2[0] - 30, ballStationary2[1])
+            else:
+                angle = 0
+                line = (ballStationary2[0] + 30, ballStationary2[1])
 
 
 pygame.quit()
