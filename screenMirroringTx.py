@@ -3,7 +3,7 @@ from vidstream import ScreenShareClient
 import threading
 
 #private ip address, port
-sender = ScreenShareClient('131.179.4.104', 9999)
+sender = ScreenShareClient('172.20.10.6', 9999)
 
 t = threading.Thread(target= sender.start_stream())
 t.start()
