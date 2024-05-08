@@ -103,7 +103,8 @@ objects = []
 put = False
 shoot = False
 start = True
-
+player1attacked = False
+player2attacked = False
 
 powerUpPlayer1 = False
 powerUpPlayer2 = False
@@ -871,6 +872,36 @@ while True:
         ballColor = startScreen.getBallColor()
         if ballColor == None:
             ballColor = (255,255,255)
+    if((player1attacked and player1_turn)):
+        player1attacked = False
+        stickyPower = True
+        ballColor = (255,0,255)
+        #powerUpPlayer1 = False
+        if(tutorial):
+            #tut_seq = 7
+            print("1...DONE WITH TUTORIAL, RACE TO THE FINISH")
+            if(tutorial == True):
+                powerUps -= 1
+            tut_seq = 7
+            spell_seq += 1
+            if(spell_seq == 2):
+                tut_seq = 9
+    if((player2attacked and player1_turn == False)):
+        player2attacked = False
+        stickyPower = True
+        ballColor2 = (255,0,255)
+        #powerUpPlayer1 = False
+        if(tutorial):
+            #tut_seq = 7
+            print("1...DONE WITH TUTORIAL, RACE TO THE FINISH")
+            if(tutorial == True):
+                powerUps -= 1
+            tut_seq = 7
+            spell_seq += 1
+            if(spell_seq == 2):
+                tut_seq = 9
+
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -949,7 +980,7 @@ while True:
                             pygame.display.update()
 
 
-                            
+                            #APP.main calls the opening of the camera
                             handGesture = app.main()
                             if(handGesture == "open"):
                                 print("Defend")
@@ -966,29 +997,41 @@ while True:
 
                             
 
-                            if(m_spell == "water"):
-                                print("Audio Linking Successful, Water is the Magic Word")
-                                stickyPower = True
+                            if(m_spell == "water" or "fire"):
+                                print("Audio Linking Successful, Water or Fire is the Magic Word")
                                 
-                                powerUps -= 1
-                                if(player1_turn):
+                                if(tutorial == False):
+                                    powerUps -= 1
+                                if((player1_turn and m_spell == "water" and handGesture == "open")):
+                                    #player1attacked = False
+                                    stickyPower = True
                                     ballColor = (255,0,255)
                                     powerUpPlayer1 = False
                                     if(tutorial):
                                         #tut_seq = 7
                                         print("1...DONE WITH TUTORIAL, RACE TO THE FINISH")
-                                        tut_seq = 7
+                                        if(tutorial == True):
+                                            powerUps -= 1
+                                        if(player1_turn):
+                                            tut_seq = 7
+                                        else:
+                                            tut_seq = 8
                                         spell_seq += 1
                                         if(spell_seq == 2):
                                             tut_seq = 9
 
                                         redrawWindow(ballStationary, ballStationary2, line, False, False)
                                         pygame.display.update()
-                                else:
+                                elif((player1_turn == False and m_spell == "fire" and handGesture == "open")):
+                                    #player2attacked = False
                                     ballColor2 = (255,0,255)
                                     powerUpPlayer2 = False
+                                    stickyPower = True
                                     if(tutorial):
-                                        tut_seq = 8
+                                        if(player1_turn):
+                                            tut_seq = 7
+                                        else:
+                                            tut_seq = 8
                                         spell_seq += 1
                                         if(spell_seq == 2):
                                             tut_seq = 9
@@ -996,6 +1039,24 @@ while True:
                                         redrawWindow(ballStationary, ballStationary2, line, False, False)
                                         pygame.display.update()
                                         print("2...DONE WITH TUTORIAL, RACE TO THE FINISH")
+                                        if(tutorial == True):
+                                            powerUps -= 1
+                                elif(player1_turn == False and m_spell == "fire" and handGesture == "close"):
+                                    print("Here1")
+                                    player1attacked = True
+                                    powerUpPlayer2 = False
+                                    if(player1_turn and tutorial):
+                                            tut_seq = 7
+                                    else:
+                                        tut_seq = 8
+                                elif(player1_turn and m_spell == "water" and handGesture == "close"):
+                                    print("Here2")
+                                    player2attacked = True
+                                    powerUpPlayer1 = False
+                                    if(player1_turn and tutorial):
+                                            tut_seq = 7
+                                    else:
+                                        tut_seq = 8
                             else:
                                 tut_seq = 4
                                 redrawWindow(ballStationary, ballStationary2, line, False, False)
@@ -1071,7 +1132,7 @@ while True:
                                     
                                     #time_mod.sleep(1.5)
                                     
-                                    power = (math.pi - m_vel1) * 30 * 4
+                                    power = (math.pi - m_vel1) * 60 * 4
                                 else:
                                     m_vel1 = velocity.getVelocity()
                                     powerBar(True, m_vel1)
@@ -1079,7 +1140,7 @@ while True:
 
                                     #time_mod.sleep(1.5)
 
-                                    power = (math.pi - m_vel1) * 40 * 4
+                                    power = (math.pi - m_vel1) * 60 * 4
 
                             if(player1_turn):
                                 shootPos = ballStationary

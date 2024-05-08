@@ -13,31 +13,35 @@ def powerUp():
 
 
 #Shift so it captures many small word segents
+import speech_recognition as sr
+
 def spellCast():
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
     with microphone as source:
-        
         recognizer.adjust_for_ambient_noise(source)
 
-        #audio = recognizer.listen(source)
-
-        audio = recognizer.listen(source, timeout=4, phrase_time_limit=4)
-        word = None
         try:
+            # Listen for the first phrase and extract it into audio data
+            audio = recognizer.listen(source, timeout=4, phrase_time_limit=4)
+            # Try to recognize the speech in the audio
             word = recognizer.recognize_google(audio)
+            return word
+
+        except sr.WaitTimeoutError:
+            # Handle the case where no speech was detected within the timeout limit
+            print("No speech detected within the timeout period.")
+            return "fail"
+
         except sr.UnknownValueError:
             # Error handling for when the speech is unintelligible
             print("Google Speech Recognition could not understand audio")
+            return "fail"
             
         except sr.RequestError as e:
             # Error handling for when there's a problem with the request to Google's service
             print(f"Could not request results from Google Speech Recognition service; {e}")
-        
-       
-        if(word != None):
-            return word
-        else: return "fail"
+            return "fail"
 """
 def recognize_speech_from_mic(recognizer, microphone):
     # check that recognizer and microphone arguments are appropriate type
