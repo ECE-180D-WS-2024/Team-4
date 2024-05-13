@@ -1,0 +1,306 @@
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Pointer
+Open
+Open
+Open
+OK
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+OK
+OK
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+OK
+OK
+OK
+Open
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+OK
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Close
+Pointer
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+(base) ianwells@Ians-MBP-6 hand-gesture-recognition-mediapipe % ﬁ
+zsh: command not found: ﬁ
+(base) ianwells@Ians-MBP-6 hand-gesture-recognition-mediapipe % cd           
+(base) ianwells@Ians-MBP-6 ~ % cd proj_final 
+(base) ianwells@Ians-MBP-6 proj_final % ls    
+Team-4					hand-gesture-recognition-mediapipe
+demo
+(base) ianwells@Ians-MBP-6 proj_final % cd Team-4
+(base) ianwells@Ians-MBP-6 Team-4 % ls
+LICENSE					keypoint_classification_EN.ipynb
+README copy.md				main.py
+__pycache__				model
+app.py					physics.py
+audio.py				point_history_classification.ipynb
+citedlinks.md				scores.txt
+courses.py				sounds
+dateReceiver.py				startScreen.py
+get_pip.py				utils
+img					velocity.py
+keypoint_classification.ipynb
+(base) ianwells@Ians-MBP-6 Team-4 % python main.py
+2024-03-17 22:51:02.733050: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+/Applications/anaconda3/lib/python3.9/site-packages/scipy/__init__.py:155: UserWarning: A NumPy version >=1.18.5 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+[GAME] Trying to import pygame
+pygame 2.5.2 (SDL 2.28.3, Python 3.9.13)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+Pointer
+Open
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Attack
+water
+Audio Linking Successful, Water is the Magic Word
+Expected Disconnect
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Open
+Defend
+water
+Audio Linking Successful, Water is the Magic Word
+Connection returned result: 0
+Expected Disconnect
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Close
+Attack
+water

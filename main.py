@@ -113,9 +113,11 @@ player1_turn = True
 
 tutorial = True
 #set tut_seq to zero if we want to have full turoital
-tut_seq = 0
+tut_seq = 9
 spell_seq = 0
 hole_seq = 0
+h1 = 0
+h2 = 0
 
 # LOAD MUSIC
 if SOUND:
@@ -396,8 +398,12 @@ def setup(level):  # Setup objects for the level from module courses
 def fade():  # Fade out screen when player gets ball in hole
     print("Get In")
     global hole_seq
-    if(hole_seq == 2):
+    global h1, h2
+    if(hole_seq == 2 or (h1 == 1 and h2 == 1)):
+        print("entered")
         hole_seq = 0
+        h1 = 0
+        h2 = 0
         fade = pygame.Surface((winwidth, winheight))
         fade.fill((0,0,0))
         for alpha in range(0, 300):
@@ -827,6 +833,7 @@ hover = False
 
 starting = True
 while starting:
+    
     pygame.time.delay(10)
     startScreen.mainScreen(hover)
 
@@ -1255,6 +1262,7 @@ while True:
 
                 # Advance to score board
                 fade()
+                displayScore(strokes, par)
                 '''
                 if strokes == 1:
                     holeInOne()
@@ -1321,6 +1329,7 @@ while True:
 
                 # Advance to score board
                 fade()
+                displayScore(strokes, par)
                 '''
                 if strokes == 1:
                     holeInOne()
@@ -1335,9 +1344,10 @@ while True:
 
       
     #Implement Shooting into the hole? Make sure this works
+    
     while shoot:  # If we are shooting the ball
         #PLAYER2 IN HOLE
-        if (overHole(ballStationary[0], ballStationary[1]) == False and overHole(ballStationary2[0], ballStationary2[1]) == False):  # If we aren't in the hole
+        if ((overHole(ballStationary[0], ballStationary[1]) == False or overHole(ballStationary2[0], ballStationary2[1]) == False) and (h1 + h2 != 2)):  # If we aren't in the hole
             maxT = physics.maxTime(power, angle)
             time += 0.085
             #ballCords = physics.ballPath(ballStationary2[0], ballStationary2[1], power, angle, time)
@@ -1687,73 +1697,96 @@ while True:
                         superPower = False
 
                         #Good Place to Switch Turns
-                        if(player1_turn):
+                        if(player1_turn and h1 != 1):
                             player1_turn = False
 
-                        else:
+                        elif(player1_turn == False and h2 != 1):
                             player1_turn = True
                         break
                         
-
-        else:
+        if(overHole(ballStationary[0], ballStationary[1]) == True):
+           
             if(player1_turn):
-                tutorial = False
+                
+                #tutorial = False
                 player1_turn = False
-                if SOUND:
-                    inHole.play()
-                var = True
-                while var:
-                    pygame.time.delay(20)
-                    redrawWindow(ballStationary, ballStationary2, None, True)
-                    ballStationary = (ballStationary[0], ballStationary[1] + 1)
-                    if ballStationary[0] > hole[0]:
-                        ballStationary = (ballStationary[0] - 1, ballStationary[1])
-                    else:
-                        ballStationary = (ballStationary[0] + 1, ballStationary[1])
+                if(h1 == 0):
+                    h1 = 1
+                    if SOUND:
+                        inHole.play()
+                    var = True
+                    while var:
+                        pygame.time.delay(20)
+                        redrawWindow(ballStationary, ballStationary2, None, True)
+                        ballStationary = (ballStationary[0], ballStationary[1] + 1)
+                        if ballStationary[0] > hole[0]:
+                            ballStationary = (ballStationary[0] - 1, ballStationary[1])
+                        else:
+                            ballStationary = (ballStationary[0] + 1, ballStationary[1])
 
-                    if ballStationary[1] > hole[1] + 5:
-                        shoot = False
-                        var = False
+                        if ballStationary[1] > hole[1] + 5:
+                            shoot = False
+                            var = False
+        if(overHole(ballStationary2[0], ballStationary2[1]) == True):
+               
+            #tutorial = False
+            #player1_turn = True
+            if(player1_turn == False):
+                
+                #tutorial = False
+                player1_turn = True
+                if(h2 == 0):
+                    h2 = 1
+                    if SOUND:
+                        inHole.play()
+                    var = True
+                    while var:
+                        pygame.time.delay(20)
+                        redrawWindow(ballStationary, ballStationary2, None, True)
+                        ballStationary2 = (ballStationary2[0], ballStationary2[1] + 1)
+                        if ballStationary2[0] > hole[0]:
+                            ballStationary2 = (ballStationary2[0] - 1, ballStationary2[1])
+                        else:
+                            ballStationary2 = (ballStationary2[0] + 1, ballStationary2[1])
 
+                        if ballStationary2[1] > hole[1] + 5:
+                            shoot = False
+                            var = False
+        if (h1 + h2 == 2):
+            #hole_seq += 1
+                
+            
+                
                 fade()
-                if strokes == 1:
-                    holeInOne()
-                else:
-                    displayScore(strokes, par)
-
+                displayScore(strokes, par)
+                tutorial = False
                 strokes = 0
                 strokes_1 = 0
                 strokes_2 = 0
-            else:
-                tutorial = False
-                player1_turn = True
-                if SOUND:
-                    inHole.play()
-                var = True
-                while var:
-                    pygame.time.delay(20)
-                    redrawWindow(ballStationary, ballStationary2, None, True)
-                    ballStationary2 = (ballStationary2[0], ballStationary2[1] + 1)
-                    if ballStationary[0] > hole[0]:
-                        ballStationary2 = (ballStationary2[0] - 1, ballStationary2[1])
-                    else:
-                        ballStationary = (ballStationary2[0] + 1, ballStationary2[1])
-
-                    if ballStationary2[1] > hole[1] + 5:
-                        shoot = False
-                        var = False
+               # break
+        
+                '''if strokes == 1:
+                    holeInOne()
+                else:
+                    displayScore(strokes, par)
+                #hole_seq += 1
+                strokes = 0
+                strokes_1 = 0
+                strokes_2 = 0'''
+            
+                
 
                 #if()
 
-                fade()
-                if strokes == 1:
+               
+                '''if strokes == 1:
                     holeInOne()
                 else:
                     displayScore(strokes, par)
 
                 strokes = 0
                 strokes_1 = 0
-                strokes_2 = 0
+                strokes_2 = 0'''
            
             
 

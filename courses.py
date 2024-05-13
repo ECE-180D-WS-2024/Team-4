@@ -13,8 +13,7 @@ lvl7 = [[0, 560, 1200, 32, 'water'], [0, 300, 128, 16, 'floor'], [0, 490, 192, 1
 lvl8 = [[400, 560, 800, 32, 'water'], [0, winheight - 8, winwidth + 64, 100, 'floor'], [-8, 0, 16, winheight + 100, 'wall'],  [winwidth - 8, 0, 16, winheight + 100, 'wall'], [0,-8, 1200, 16, 'floor'], [winwidth - 134, 200, 128, 8, 'green'], [winwidth - 134, 208, 128, 16, 'floor'], [winwidth - 326, 200, 192, 32, 'water'], [winwidth - 340, 176, 16, 64, 'wall'], [winwidth - 326, -32, 16, 128, 'wall'], [400, 200, 16, 550, 'wall'], [150, 300, 64, 64, 'sand'], [540, 190, 128, 64, 'sand'], [574, 150, 32, 32, 'coin', True], [370, 184, 64, 16, 'floor'],[390, 200, 16, 550, 'laser'], [0, 500, 64, 16, 'floor'],[272, 440, 128, 16, 'floor'], [winwidth - 326, 224, 400, 16, 'floor'],[winwidth - 68, 140, 64, 64, 'flag'], [6, (200, 588)]]
 lvl9 = [[0, winheight-36, 1200, 32, 'water'], [-8,0,16, 700, 'wall'], [winwidth-8, 0, 16, 700, 'wall'], [0, -8, 1200, 16, 'floor'], [0,winheight-8,1200, 16, 'floor'], [0, 500, 128, 16, 'floor'], [350, 375, 128, 64, 'sand'],[700, 250, 64, 64, 'sand'], [winwidth -198, 150, 200, 8, 'green'], [winwidth -198, 158, 200, 8, 'floor'],[550, 230, 32, 32, 'coin', True],[winwidth-80, 90, 64, 64, 'flag'], [5, (64, 496)]]
 course1 = [lvl1, lvl2, lvl3, lvl4, lvl5, lvl6, lvl7, lvl8, lvl9]
-#course1 = [lvl1]
-
+#course1 = [lvl1]1
 
 def getLvl(n=1):
     return course1[n - 1][:-1]

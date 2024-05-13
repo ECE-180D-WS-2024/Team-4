@@ -1,7 +1,5 @@
 score 0
-coins 2
-204,255,153-False
-204,204,255-False
+coins 0
 0,153,56-False
 255,152,52-False
 >>>>>>> f68587204e0467caad9e61120ac17a045052c1ec

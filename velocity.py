@@ -29,7 +29,7 @@ def getVelocity():
     
     #TESTING
     #Velocity can be from 0 to pi
-    #scaled_velocity = 2.3
+    scaled_velocity = 2.7
     print(scaled_velocity)
     return scaled_velocity
 
