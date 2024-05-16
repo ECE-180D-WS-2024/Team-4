@@ -262,7 +262,7 @@ def error():
         pass
 
 
-def endScreen(): # Display this screen when the user completes trhe course
+def endScreen(): # Display this screen when the user completes the course
     global start, starting, level, sheet, coins
     starting = True
     start = True
@@ -825,7 +825,7 @@ def overHole(x,y):  # Determine if we are over top of the hole
     else:
         return False
 
-
+#++++++++++++++++++++++++++++++++ START OF THE GAME +++++++++++++++++++++++++++++++++++++++++++
 list = courses.getPar(1)
 par = list[level - 1]
 sheet = scoreSheet(list)
