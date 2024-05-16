@@ -1,4 +1,8 @@
 score 0
+<<<<<<< HEAD
 coins 10
+=======
+coins 0
+>>>>>>> 864594a (played game)
 >>>>>>> f68587204e0467caad9e61120ac17a045052c1ec
 25,67,132-False
