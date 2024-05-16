@@ -6,7 +6,7 @@ import velocity
 import audio
 import app
 import time as time_mod
-
+import random
 
 
 def install(package):
@@ -113,11 +113,14 @@ player1_turn = True
 
 tutorial = True
 #set tut_seq to zero if we want to have full turoital
-tut_seq = 9
+tut_seq = 0
 spell_seq = 0
 hole_seq = 0
 h1 = 0
 h2 = 0
+
+player1Round = 0
+player2Round = 0
 
 # LOAD MUSIC
 if SOUND:
@@ -131,7 +134,17 @@ if SOUND:
 # POWER UP VARS
 powerUps = 7
 hazard = False
+#Ball Sticks to walls etc...
 stickyPower = False
+#Ball swings is much more sensitive
+heavyHanded = False
+#Makes gravity stronger
+blackHole = False
+#Makes gravity less strong
+moonGravity = False
+#Strokes don't add to a player when hit into water until level is over
+waterWizard = False
+
 mullagain = False
 superPower = False
 powerUpButtons = [[900, 35, 20, 'P', (255,69,0)],[1000, 35, 20, 'S', (255,0,255)], [950, 35, 20, 'M', (105,105,105)]]
@@ -441,28 +454,36 @@ def holeInOne():  # If player gets a hole in one display special mesage to scree
 
 
 def displayScore(stroke, par):  # Using proper golf terminology display score
-    if stroke == 0:
-        text = 'Skipped'
-    elif stroke == par - 4:
-        text = '-4 !'
-    elif stroke == par - 3:
-        text = 'Albatross!'
-    elif stroke == par - 2:
-        text = 'Eagle!'
-    elif stroke == par - 1:
-        text = 'Birdie!'
-    elif stroke == par:
-        text = 'Par'
-    elif stroke == par + 1:
-        text = 'Bogey :('
-    elif stroke == par + 2:
-        text = 'Double Bogey :('
-    elif stroke == par + 3:
-        text = 'Triple Bogey :('
-    else:
-        text = '+ ' + str(stroke - par) + ' :('
+    #RoundWinner -1 not yet assigned, 1 is player 1, 2 is player 2, 3 is a round tie
+    roundWinner = 0
+    global player1Round, player2Round
+    if(strokes_1 < strokes_2):
+        player1Round += 1
 
-    label = myFont.render(text, 1, (255,255,255))
+    elif(strokes_2 < strokes_1):
+        player2Round += 1
+    else:
+        print("Round is a tie")
+
+    if(player1Round > player2Round):
+        text = parFont.render('Wizard 1 is winning!', 1, (255,255,255))
+        win.blit(text, (winwidth//2 - 200,100))
+    if(player2Round > player1Round):
+        text = parFont.render('Wizard 2 is winning!', 1, (255,255,255))
+        win.blit(text, (winwidth//2 - 200,100))
+    else:
+        #wizards are tied 
+        text = parFont.render('Wizards are tied!', 1, (255,255,255))
+        win.blit(text, (winwidth//2 - 200,100))
+
+    #Display Rounds
+    text = parFont.render('Player 1 rounds won: ' + str(player1Round), 1, (255,255,255))
+    win.blit(text, (winwidth//2 - 200,135))
+    text = parFont.render('Player 2 rounds won: ' + str(player2Round), 1, (255,255,255))
+    win.blit(text, (winwidth//2 - 200,170))
+
+
+    #label = myFont.render(text, 1, (255,255,255))
     #win.blit(label, ((winwidth//2) - (label.get_width() // 2), (winheight//2) - (label.get_height()//2)))
     
     #Setting the display to zero score
@@ -882,7 +903,25 @@ while True:
             ballColor = (255,255,255)
     if((player1attacked and player1_turn)):
         player1attacked = False
-        stickyPower = True
+        #Randomize power up features
+        
+
+        if(tutorial == True):
+            stickyPower = True
+            ballColor = (255,0,255)
+        else:
+            #Randomly selects a powerup with equal chance
+            number = random.randint(1,4)
+            if(number == 1):
+                stickyPower = True
+                ballColor = (255,0,255)
+            elif(number == 2):
+                moonGravity = True
+            elif(number == 3):
+                blackHole = True
+            elif(number == 4):
+                moonGravity = True
+
         ballColor = (255,0,255)
         #powerUpPlayer1 = False
         if(tutorial):
@@ -1000,11 +1039,17 @@ while True:
                             redrawWindow(ballStationary, ballStationary2, line, False, False)
                             pygame.display.update()
                                 
-                            m_spell = audio.spellCast()
+                            #m_spell = audio.spellCast()
+                            #debugging
+                            if(player1_turn):
+                                m_spell = "water"
+                            elif(player1_turn == False):
+                                m_spell = "fire"
                             print(m_spell)
 
-                            
 
+                            
+                            #Debugging m_spell == "water" or "fire"
                             if(m_spell == "water" or "fire"):
                                 print("Audio Linking Successful, Water or Fire is the Magic Word")
                                 
@@ -1012,6 +1057,7 @@ while True:
                                     powerUps -= 1
                                 if((player1_turn and m_spell == "water" and handGesture == "open")):
                                     #player1attacked = False
+                                    
                                     stickyPower = True
                                     ballColor = (255,0,255)
                                     powerUpPlayer1 = False
@@ -1232,8 +1278,8 @@ while True:
                     
 
                     if(player1_turn and hole_seq == 0):
-                            print("1")
-                            player1_turn = False
+                        print("1")
+                        player1_turn = False
                     elif(player1_turn == False and hole_seq == 0):
                         print("2")
                         player1_turn = True
@@ -1387,6 +1433,8 @@ while True:
                                 courses.coinHit(level - 1)
                                 coins += 1
                                 print("HIT COIN")
+                                text = parFont.render('Sticky Power', 1, (64,64,64))
+                                win.blit(text, (50,100))
                                 if(player1_turn):
                                     tut_seq = 3
                                     powerUpPlayer1 = True
@@ -1756,7 +1804,6 @@ while True:
         if (h1 + h2 == 2):
             #hole_seq += 1
                 
-            
                 
                 fade()
                 displayScore(strokes, par)
