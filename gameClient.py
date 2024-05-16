@@ -8,8 +8,6 @@ import app
 import time as time_mod
 import socket
 
-
-
 def install(package):
     subprocess.call([sys.executable, "-m", "pip", "install", package])
 
