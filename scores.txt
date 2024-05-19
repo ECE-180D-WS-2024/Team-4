@@ -1,5 +1,4 @@
 score 0
 coins 5
-255,152,52-False
 >>>>>>> f68587204e0467caad9e61120ac17a045052c1ec
 25,67,132-False
