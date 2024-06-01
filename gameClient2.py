@@ -804,6 +804,7 @@ def overHole(x,y):  # Determine if we are over top of the hole
         return False
 
 #++++++++++++++++++++++++++++++++ START OF THE GAME +++++++++++++++++++++++++++++++++++++++++++
+
 list = courses.getPar(1)
 par = list[level - 1]
 sheet = scoreSheet(list)
@@ -870,12 +871,13 @@ while starting:
         if event.type == pygame.QUIT:
             pygame.quit()
             break
-        
+
+
 
 #######################################
-#CREATION OF NETWORK SOCKET AFTER THE START SCREEN
+#CREATION OF NETWORK SOCKET
 from gameNetwork import *
-player1client = Network()
+player2client = Network()
 
 #Helper Funcitons
 def read_pos(str):
@@ -888,11 +890,8 @@ def make_pos(tup):
 #######################################
 
 
-
 # Game Loop for levels and collision
 while True:
-    
-    
     if stickyPower == False and superPower == False:
         ballColor = startScreen.getBallColor()
         if ballColor == None:
@@ -1372,14 +1371,15 @@ while True:
 
             
             if(player1_turn):
-                ballCords = physics.ballPath(ballStationary[0], ballStationary[1], power, angle, time)
+                #ballCords = physics.ballPath(ballStationary[0], ballStationary[1], power, angle, time)
                 #stringCoord = f"{ballCords[0]},{ballCords[1]}"
-                #player1client.send(stringCoord)
+                ballCords = read_pos(player2client.receive())
                 redrawWindow(ballCords, ballStationary2, None, True)
                 #player1_turn = False
             else:
                 ballCords = physics.ballPath(ballStationary2[0], ballStationary2[1], power, angle, time)
-                #ballCords = read_pos(player1client.receive())
+                stringCoord = f"{ballCords[0]},{ballCords[1]}"
+                player2client.send(ballCords)
                 redrawWindow(ballStationary, ballCords, None, True)
                 #player1_turn = True
 

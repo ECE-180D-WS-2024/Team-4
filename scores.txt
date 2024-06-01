@@ -1,4 +1,2 @@
 score 0
-coins 5
->>>>>>> f68587204e0467caad9e61120ac17a045052c1ec
-25,67,132-False
+coins 10
