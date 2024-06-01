@@ -872,8 +872,27 @@ while starting:
             break
         
 
+#######################################
+#CREATION OF NETWORK SOCKET AFTER THE START SCREEN
+from gameNetwork import *
+player1client = Network()
+
+#Helper Funcitons
+def read_pos(str):
+    str = str.split(",")
+    return int(str[0]), int(str[1]), bool(str[2])
+
+def make_pos(tup):
+    return str(tup[0]) + "," + str(tup[1]) + "," + str(tup[2])
+
+#######################################
+
+
+
 # Game Loop for levels and collision
 while True:
+    
+    
     if stickyPower == False and superPower == False:
         ballColor = startScreen.getBallColor()
         if ballColor == None:
@@ -1354,10 +1373,13 @@ while True:
             
             if(player1_turn):
                 ballCords = physics.ballPath(ballStationary[0], ballStationary[1], power, angle, time)
+                #stringCoord = f"{ballCords[0]},{ballCords[1]}"
+                #player1client.send(stringCoord)
                 redrawWindow(ballCords, ballStationary2, None, True)
                 #player1_turn = False
             else:
                 ballCords = physics.ballPath(ballStationary2[0], ballStationary2[1], power, angle, time)
+                #ballCords = read_pos(player1client.receive())
                 redrawWindow(ballStationary, ballCords, None, True)
                 #player1_turn = True
 
