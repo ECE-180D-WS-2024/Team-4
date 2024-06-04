@@ -1903,6 +1903,8 @@ while True:
                         if ballStationary[1] > hole[1] + 5:
                             shoot = False
                             var = False
+
+                            
         if(overHole(ballStationary2[0], ballStationary2[1]) == True):
                
             #tutorial = False
