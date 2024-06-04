@@ -25,7 +25,7 @@ def spellCast():
             # Listen for the first phrase and extract it into audio data
             audio = recognizer.listen(source, timeout=4, phrase_time_limit=4)
             # Try to recognize the speech in the audio
-            word = recognizer.recognize_google(audio)
+            word = recognizer.recognize_google(audio, language="it-IT")
             return word
 
         except sr.WaitTimeoutError:
