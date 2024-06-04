@@ -47,18 +47,4 @@ while True:
     start_new_thread(threaded_client, (conn,))
 
 
-#######################################
-#CREATION OF NETWORK SOCKET AFTER THE START SCREEN
-#from gameNetwork import *
-#player1client = Network()
 
-#Helper Funcitons
-#def read_pos(str):
-#    str = str.split(",")
-#    return int(str[0]), int(str[1]), bool(str[2])
-
-#def make_pos(tup):
-#    return str(tup[0]) + "," + str(tup[1]) + "," + str(tup[2])
-
-#######################################
-    
