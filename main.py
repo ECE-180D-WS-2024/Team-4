@@ -50,7 +50,7 @@ import sys
 # INITIALIZATION
 pygame.init()
 
-SOUND = True
+SOUND = False
 
 winwidth = 1080
 winheight = 600
@@ -115,7 +115,8 @@ handGesture = "none"
 player1_turn = True
 
 #Set to true if level 1 is involved
-tutorial = False
+tutorial = True
+thereIsTutorial = True
 
 #set tut_seq to zero if we want to have full turoital
 tut_seq = 0
@@ -125,6 +126,7 @@ h1 = 0
 h2 = 0
 
 player1Round = 0
+g_norm = 0
 player2Round = 0
 
 # LOAD MUSIC
@@ -464,15 +466,19 @@ def holeInOne():  # If player gets a hole in one display special mesage to scree
 def displayScore(stroke, par):  # Using proper golf terminology display score
     #RoundWinner -1 not yet assigned, 1 is player 1, 2 is player 2, 3 is a round tie
     roundWinner = 0
-    global player1Round, player2Round
-    if(strokes_1 < strokes_2):
-        player1Round += 1
+    global player1Round, player2Round, thereIsTutorial
 
-    elif(strokes_2 < strokes_1):
-        player2Round += 1
+    if(thereIsTutorial == False):
+        if(strokes_1 < strokes_2):
+            player1Round += 1
+
+        elif(strokes_2 < strokes_1):
+            player2Round += 1
+        else:
+            print("Round is a tie")
     else:
-        print("Round is a tie")
-
+        thereIsTutorial = False
+        
     if(player1Round > player2Round):
         text = parFont.render('Wizard 1 is winning!', 1, (255,255,255))
         win.blit(text, (winwidth//2 - 200,100))
@@ -544,6 +550,9 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
     
     text = parFont.render('Strokes: ' + str(this_stroke), 1, (64,64,64))
     win.blit(text, (18,45))
+
+    text = parFont.render('Shot Power: ' + str(g_norm) + "%", 1, (64,64,64))
+    win.blit(text, (250,10))
 
 
     #Welcome to the 89,575th annual golf wizarding tournament
@@ -619,6 +628,7 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
             text = parFont.render('Click the spell icon (top right) to initiate casting.', 1, (64,64,64))
             win.blit(text, (50,205)) 
         if(tut_seq == 5):
+            
             text = parFont.render('As per sorcerers guidelines, spells must be cast at start of each turn', 1, (64,64,64))
             win.blit(text, (50,100))
             text = parFont.render('Spells can be applied to your opponent or self', 1, (64,64,64))
@@ -627,6 +637,12 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
             win.blit(text, (50,170))
             text = parFont.render('Raise an open facing palm to apply to powerup to self ', 1, (64,64,64))
             win.blit(text, (50,205))
+            pygame.display.update()
+            pygame.time.delay(6000)
+            text = parFont.render('Hold up gesture!!!', 1, (255,0,0))
+            win.blit(text, (350,400))
+            pygame.display.update()
+            
             
         if(tut_seq == 6):
             text = parFont.render('Now speak (into mic) your casting phrase!!', 1, (64,64,64))
@@ -637,6 +653,8 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
             win.blit(text, (50,170))
             text = parFont.render('Speech precision is crucial to a successful casting....', 1, (64,64,64))
             win.blit(text, (50,205))
+            pygame.display.update()
+            pygame.time.delay(4500)
         if(tut_seq == 7):
             text = parFont.render('Congrats on your spell casting player 1!', 1, (64,64,64))
             win.blit(text, (50,100))
@@ -922,7 +940,8 @@ while True:
             ballColor = (255,0,255)
         else:
             #Randomly selects a powerup with equal chance
-            number = random.randint(1,4)
+            number = powerup_number
+            
             if(number == 1):
                 stickyPower = True
                 ballColor = (255,0,255)
@@ -931,7 +950,10 @@ while True:
             elif(number == 3):
                 blackHole = True
             elif(number == 4):
-                moonGravity = True
+                if(player1_turn):
+                    strokes_1 = strokes_1 - 3
+                else:
+                    strokes_2 = strokes_2 - 3
 
         ballColor = (255,0,255)
         #powerUpPlayer1 = False
@@ -947,10 +969,10 @@ while True:
     if((player2attacked and player1_turn == False)):
         if(tutorial == True):
             stickyPower = True
-            ballColor = (255,0,255)
+            ballColor2 = (255,0,255)
         else:
             #Randomly selects a powerup with equal chance
-            number = random.randint(1,4)
+            number = powerup_number
             if(number == 1):
                 stickyPower = True
                 ballColor2 = (255,0,255)
@@ -959,7 +981,10 @@ while True:
             elif(number == 3):
                 blackHole = True
             elif(number == 4):
-                moonGravity = True
+                if(player1_turn):
+                    strokes_1 = strokes_1 - 3
+                else:
+                    strokes_2 = strokes_2 - 3
 
         player2attacked = False
         #powerUpPlayer1 = False
@@ -1049,30 +1074,34 @@ while True:
                             #win.blit(text, (50,170))
                             tut_seq = 5
 
-                            powerup_number = random.randint(1,4)
-                            if(powerup_number == 1):
-                                text = parFont.render('Sticky Power! Attack or Defend!!!', 1, (255,0,0))
-                                win.blit(text, (425,100))
-                                pygame.display.update()
-                                pygame.time.delay(1500)
-                            elif(powerup_number == 2):
-                                text = parFont.render('Moon gravity! Attack or Defend!!!', 1, (255,0,0))
-                                win.blit(text, (425,100))
-                                pygame.display.update()
-                                pygame.time.delay(1500)
-                            elif(powerup_number == 3):
-                                text = parFont.render('Heavy swing! Attack or Defend!!!', 1, (255,0,0))
-                                win.blit(text, (425,100))
-                                pygame.display.update()
-                                pygame.time.delay(1500)
-                            elif(powerup_number == 4):
-                                text = parFont.render('Stroke division! Attack or Defend!!!', 1, (255,0,0))
-                                win.blit(text, (425,100))
-                                pygame.display.update()
-                                pygame.time.delay(1500)
+                            powerup_number = 4# random.randint(1,4)
+
+                            if(tutorial == False):
+                                if(powerup_number == 1):
+                                    text = parFont.render('Sticky Power! Palm or Fist!!!', 1, (255,0,0))
+                                    win.blit(text, (350,100))
+                                    pygame.display.update()
+                                    pygame.time.delay(2000)
+                                elif(powerup_number == 2):
+                                    text = parFont.render('Moon gravity! Palm or Fist!!!', 1, (255,0,0))
+                                    win.blit(text, (350,100))
+                                    pygame.display.update()
+                                    pygame.time.delay(2000)
+                                elif(powerup_number == 3):
+                                    text = parFont.render('Heavy swing! Palm or Fist!!!', 1, (255,0,0))
+                                    win.blit(text, (350,100))
+                                    pygame.display.update()
+                                    pygame.time.delay(2000)
+                                elif(powerup_number == 4):
+                                    text = parFont.render('Stroke subtraction! Palm or Fist!!!', 1, (255,0,0))
+                                    win.blit(text, (350,100))
+                                    pygame.display.update()
+                                    pygame.time.delay(2000)
 
                             redrawWindow(ballStationary, ballStationary2, line, False, False)
                             pygame.display.update()
+
+                            
                             
 
 
@@ -1088,15 +1117,37 @@ while True:
                             redrawWindow(ballStationary, ballStationary2, line, False, False)
                             pygame.display.update()
                                 
-                            #m_spell = audio.spellCast()
+                            
+                            if(tutorial == False):
+                                text = parFont.render('Cast your magic phrase!', 1, (255,0,0))
+                                win.blit(text, (350,100))
+                                pygame.display.update()
+                            
+                            if(tutorial):
+                                print("Cast")
+                                text = parFont.render('Cast!!!', 1, (255,0,0))
+                                win.blit(text, (350,400))
+                                pygame.display.update()
+                            #pygame.time.delay(1500)
+                            if(tutorial):
+                                m_spell = ""
+                                while((player1_turn and m_spell != "water") or (player1_turn == False and m_spell != "fire")):
+                                    m_spell = audio.spellCast()
+                                    text = parFont.render('Cast!!!', 1, (255,0,0))
+                                    win.blit(text, (350,400))
+                                    pygame.display.update()
+                            else:
+                                 m_spell = audio.spellCast()
                             #debugging to save some time
-                            if(player1_turn):
-                                m_spell = "water"
-                            elif(player1_turn == False):
-                                m_spell = "fire"
+                            #if(player1_turn):
+                            #    m_spell = "water"
+                            #elif(player1_turn == False):
+                            #    m_spell = "fire"
                             print(m_spell)
 
                             #Debugging m_spell == "water" or "fire"
+
+                            pygame.display.update()
                             if(m_spell == "water" or "fire"):
                                 print("Audio Linking Successful, Water or Fire is the Magic Word")
                                 
@@ -1127,8 +1178,10 @@ while True:
                                             print("3")
                                             blackHole = True
                                         elif(number == 4):
-                                            print("3")
-                                            moonGravity = True
+                                            if(player1_turn):
+                                                strokes_1 = strokes_1 - 3
+                                            else:
+                                                strokes_2 = strokes_2 - 3
 
                                     
                                     powerUpPlayer1 = False
@@ -1175,8 +1228,10 @@ while True:
                                             print("3")
                                             blackHole = True
                                         elif(number == 4):
-                                            print("3")
-                                            moonGravity = True
+                                            if(player1_turn):
+                                                strokes_1 = strokes_1 - 3
+                                            else:
+                                                strokes_2 = strokes_2 - 3
         
 
 
@@ -1279,6 +1334,7 @@ while True:
                                 #original has power angle insetead of velocity.getVelocity()
                                 
                                 power = (math.pi - velocity.getVelocity() ) * 20
+
                                 rollVel = power
                             else:
                                 if not superPower:  # Change power if we selected power ball
@@ -1302,6 +1358,13 @@ while True:
                                 shootPos = ballStationary
                             else:
                                 shootPos = ballStationary2
+
+                            #Gives is the shot velocity percentage
+                            power_norm = int((power / (2.5 / 2)))
+                            power_norm = str(power_norm) 
+                            g_norm = power_norm
+
+                            
                             
                             powerLock = True
                             if(tutorial and tut_seq < 2):

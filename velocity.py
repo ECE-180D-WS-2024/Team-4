@@ -21,7 +21,6 @@ m_vel = 0
 #if velocity > threshold
 def getVelocity():
     global m_vel
-    
     run()
     scaled_velocity = (1-m_vel) * math.pi
 
@@ -29,7 +28,7 @@ def getVelocity():
     
     #TESTING
     #Velocity can be from 0 to pi
-    scaled_velocity = 2.8
+    scaled_velocity = 2.55
     print(scaled_velocity)
     return scaled_velocity
 
@@ -41,8 +40,8 @@ def setVelocity(velocity):
 
     if(norm_vel <= 0):
         norm_vel = 0
-    if(norm_vel >= 1):
-        norm_vel = 1
+    if(norm_vel >= 0.25):
+        norm_vel = 0.25
     
     #else normalized value is between 0 and 1
     m_vel = norm_vel
@@ -104,7 +103,7 @@ def run():
         #perhaps future tests could establish something else
         #print(1)
         #Can i go lower?
-        #time.sleep(6)
+        #time.sleep(3)
         #in class latency of 3!!! while on hotspot seems like the sweet spot
         #time.sleep(0)
         #decoded_payload = message.payload.decode('utf-8')
