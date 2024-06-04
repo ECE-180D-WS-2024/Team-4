@@ -50,7 +50,7 @@ import sys
 # INITIALIZATION
 pygame.init()
 
-SOUND = False
+SOUND = True
 
 winwidth = 1080
 winheight = 600
@@ -87,8 +87,8 @@ strokes = 0
 strokes_1 = 0
 strokes_2 = 0
 par = 0
-#OG lvl = 8
-level = 8
+#OG lvl = 8??
+level = 1
 flagx = 0
 coins = 0
 shootPos = ()
@@ -108,10 +108,15 @@ player2attacked = False
 
 powerUpPlayer1 = False
 powerUpPlayer2 = False
+
+powerup_number = 1
+
 handGesture = "none"
 player1_turn = True
 
-tutorial = True
+#Set to true if level 1 is involved
+tutorial = False
+
 #set tut_seq to zero if we want to have full turoital
 tut_seq = 0
 spell_seq = 0
@@ -262,7 +267,7 @@ def error():
         pass
 
 
-def endScreen(): # Display this screen when the user completes trhe course
+def endScreen(): # Display this screen when the user completes the course
     global start, starting, level, sheet, coins
     starting = True
     start = True
@@ -329,8 +334,9 @@ def endScreen(): # Display this screen when the user completes trhe course
             if event.type == pygame.MOUSEBUTTONDOWN:
                 loop = False
                 break
-    level = 1
-    setup(level)
+    #UNCOMMENT?
+    #level = 1
+    setup(level - 1)
     list = courses.getPar(1)
     par = list[level - 1]
     sheet = scoreSheet(list)
@@ -429,8 +435,10 @@ def fade():  # Fade out screen when player gets ball in hole
 
 def showScore():  # Display the score from class scoreSheet
     global level
+    global tutorial
     #sleep(2)
     level += 1
+    tutorial = False
     sheet.drawSheet(strokes)
     pygame.display.update()
     go = True
@@ -468,7 +476,7 @@ def displayScore(stroke, par):  # Using proper golf terminology display score
     if(player1Round > player2Round):
         text = parFont.render('Wizard 1 is winning!', 1, (255,255,255))
         win.blit(text, (winwidth//2 - 200,100))
-    if(player2Round > player1Round):
+    elif(player2Round > player1Round):
         text = parFont.render('Wizard 2 is winning!', 1, (255,255,255))
         win.blit(text, (winwidth//2 - 200,100))
     else:
@@ -619,6 +627,7 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
             win.blit(text, (50,170))
             text = parFont.render('Raise an open facing palm to apply to powerup to self ', 1, (64,64,64))
             win.blit(text, (50,205))
+            
         if(tut_seq == 6):
             text = parFont.render('Now speak (into mic) your casting phrase!!', 1, (64,64,64))
             win.blit(text, (50,100))
@@ -718,9 +727,12 @@ def redrawWindow(ball, ball2, line, shoot=False, update=True):
             for x in range(i[3]//64):
                 win.blit(sticky, (i[0], i[1] + (64 * x)))
         elif i[4] == 'coin':
+        
             if i[5]:
+               
                 img = coinImg()
-                if(tut_seq == 2):
+            
+                if(tut_seq == 2 or tutorial == False):
                     win.blit(img, (i[0], i[1]))
 
     win.blit(powerMeter, (4, 520))
@@ -825,7 +837,7 @@ def overHole(x,y):  # Determine if we are over top of the hole
     else:
         return False
 
-
+#++++++++++++++++++++++++++++++++ START OF THE GAME +++++++++++++++++++++++++++++++++++++++++++
 list = courses.getPar(1)
 par = list[level - 1]
 sheet = scoreSheet(list)
@@ -933,9 +945,23 @@ while True:
             if(spell_seq == 2):
                 tut_seq = 9
     if((player2attacked and player1_turn == False)):
+        if(tutorial == True):
+            stickyPower = True
+            ballColor = (255,0,255)
+        else:
+            #Randomly selects a powerup with equal chance
+            number = random.randint(1,4)
+            if(number == 1):
+                stickyPower = True
+                ballColor2 = (255,0,255)
+            elif(number == 2):
+                moonGravity = True
+            elif(number == 3):
+                blackHole = True
+            elif(number == 4):
+                moonGravity = True
+
         player2attacked = False
-        stickyPower = True
-        ballColor2 = (255,0,255)
         #powerUpPlayer1 = False
         if(tutorial):
             #tut_seq = 7
@@ -1022,8 +1048,32 @@ while True:
                             #text = parFont.render('Show your camera an open facing palm to apply to powerup to self ', 1, (64,64,64))
                             #win.blit(text, (50,170))
                             tut_seq = 5
+
+                            powerup_number = random.randint(1,4)
+                            if(powerup_number == 1):
+                                text = parFont.render('Sticky Power! Attack or Defend!!!', 1, (255,0,0))
+                                win.blit(text, (425,100))
+                                pygame.display.update()
+                                pygame.time.delay(1500)
+                            elif(powerup_number == 2):
+                                text = parFont.render('Moon gravity! Attack or Defend!!!', 1, (255,0,0))
+                                win.blit(text, (425,100))
+                                pygame.display.update()
+                                pygame.time.delay(1500)
+                            elif(powerup_number == 3):
+                                text = parFont.render('Heavy swing! Attack or Defend!!!', 1, (255,0,0))
+                                win.blit(text, (425,100))
+                                pygame.display.update()
+                                pygame.time.delay(1500)
+                            elif(powerup_number == 4):
+                                text = parFont.render('Stroke division! Attack or Defend!!!', 1, (255,0,0))
+                                win.blit(text, (425,100))
+                                pygame.display.update()
+                                pygame.time.delay(1500)
+
                             redrawWindow(ballStationary, ballStationary2, line, False, False)
                             pygame.display.update()
+                            
 
 
                             #APP.main calls the opening of the camera
@@ -1039,15 +1089,13 @@ while True:
                             pygame.display.update()
                                 
                             #m_spell = audio.spellCast()
-                            #debugging
+                            #debugging to save some time
                             if(player1_turn):
                                 m_spell = "water"
                             elif(player1_turn == False):
                                 m_spell = "fire"
                             print(m_spell)
 
-
-                            
                             #Debugging m_spell == "water" or "fire"
                             if(m_spell == "water" or "fire"):
                                 print("Audio Linking Successful, Water or Fire is the Magic Word")
@@ -1056,12 +1104,37 @@ while True:
                                     powerUps -= 1
                                 if((player1_turn and m_spell == "water" and handGesture == "open")):
                                     #player1attacked = False
+
+
+                                    if(tutorial == True):
+                                        stickyPower = True
+                                        ballColor = (255,0,255)
+                                    else:
+                                        number = powerup_number#random.randint(1,4)
+                                        if(number == 1):
+                                            print("1")
+                                            stickyPower = True
+                                            ballColor = (255,0,255)
+                                            text = parFont.render('Sticky Power Active!', 1, (255,0,0))
+                                            win.blit(text, (425,100))
+                                            pygame.display.update()
+                                            pygame.time.delay(1500)
+
+                                        elif(number == 2):
+                                            print("2")
+                                            moonGravity = True
+                                        elif(number == 3):
+                                            print("3")
+                                            blackHole = True
+                                        elif(number == 4):
+                                            print("3")
+                                            moonGravity = True
+
                                     
-                                    stickyPower = True
-                                    ballColor = (255,0,255)
                                     powerUpPlayer1 = False
                                     if(tutorial):
-                                        #tut_seq = 7
+                                        
+
                                         print("1...DONE WITH TUTORIAL, RACE TO THE FINISH")
                                         if(tutorial == True):
                                             powerUps -= 1
@@ -1076,10 +1149,40 @@ while True:
                                         redrawWindow(ballStationary, ballStationary2, line, False, False)
                                         pygame.display.update()
                                 elif((player1_turn == False and m_spell == "fire" and handGesture == "open")):
-                                    #player2attacked = False
-                                    ballColor2 = (255,0,255)
+                                    
+                                    
                                     powerUpPlayer2 = False
-                                    stickyPower = True
+                                    
+                                    if(tutorial == True):
+                                        stickyPower = True
+                                        ballColor2 = (255,0,255)
+                                    else:
+                                        number = powerup_number#random.randint(1,4)
+                                        if(number == 1):
+                                            print("1")
+                                            stickyPower = True
+                                            ballColor2 = (255,0,255)
+                                            text = parFont.render('Sticky Power Active!', 1, (255,0,0))
+                                            win.blit(text, (425,100))
+                                            pygame.display.update()
+                                            pygame.time.delay(1500)
+
+                                            
+                                        elif(number == 2):
+                                            print("2")
+                                            moonGravity = True
+                                        elif(number == 3):
+                                            print("3")
+                                            blackHole = True
+                                        elif(number == 4):
+                                            print("3")
+                                            moonGravity = True
+        
+
+
+                                    
+        
+
                                     if(tutorial):
                                         if(player1_turn):
                                             tut_seq = 7
@@ -1175,7 +1278,7 @@ while True:
                                 #REPLACE powerAngle with getVelocity()
                                 #original has power angle insetead of velocity.getVelocity()
                                 
-                                power = (math.pi - velocity.getVelocity() ) * 5
+                                power = (math.pi - velocity.getVelocity() ) * 20
                                 rollVel = power
                             else:
                                 if not superPower:  # Change power if we selected power ball
@@ -1183,17 +1286,17 @@ while True:
                                     powerBar(True, m_vel1)
                                     redrawWindow(ballStationary, ballStationary2, line, False, False)
                                     
-                                    #time_mod.sleep(1.5)
+                                    #
                                     
-                                    power = (math.pi - m_vel1) * 60 * 4
+                                    power = (math.pi - m_vel1) * 40 * 4
                                 else:
                                     m_vel1 = velocity.getVelocity()
                                     powerBar(True, m_vel1)
                                     redrawWindow(ballStationary, ballStationary2, line, False, False)
 
-                                    #time_mod.sleep(1.5)
+                                    
 
-                                    power = (math.pi - m_vel1) * 60 * 4
+                                    power = (math.pi - m_vel1) * 40 * 4
 
                             if(player1_turn):
                                 shootPos = ballStationary
@@ -1289,33 +1392,35 @@ while True:
 
                 hole_seq += 1
                 print("hole seq 1")
+                
                 player1_turn = False
 
-                if SOUND:
-                    inHole.play()
-                while True:  # Move ball so it looks like it goes into the hole (increase y value)
-                    pygame.time.delay(20)
-                    redrawWindow(ballStationary, ballStationary2, None, True)
-                    ballStationary = (ballStationary[0], ballStationary[1] + 1)
-                    if ballStationary[0] > hole[0]:
-                        ballStationary = (ballStationary[0] - 1, ballStationary[1])
-                    else:
-                        ballStationary = (ballStationary[0] + 1, ballStationary[1])
+                if(h1 == 0):
+                    h1 = 1
+                    if SOUND:
+                        inHole.play()
+                    while True:  # Move ball so it looks like it goes into the hole (increase y value)
+                        pygame.time.delay(20)
+                        redrawWindow(ballStationary, ballStationary2, None, True)
+                        ballStationary = (ballStationary[0], ballStationary[1] + 1)
+                        if ballStationary[0] > hole[0]:
+                            ballStationary = (ballStationary[0] - 1, ballStationary[1])
+                        else:
+                            ballStationary = (ballStationary[0] + 1, ballStationary[1])
 
-                    if ballStationary[1] > hole[1] + 5:
-                        put = False
-                        break
+                        if ballStationary[1] > hole[1] + 5:
+                            put = False
+                            break
 
                 # Advance to score board
-                fade()
-                displayScore(strokes, par)
-                '''
-                if strokes == 1:
-                    holeInOne()
-                else:
+                if (h1 + h2 == 2):
+                #hole_seq += 1
+                    fade()
                     displayScore(strokes, par)
-                '''
-                strokes = 0
+                    tutorial = False
+                    strokes = 0
+                    strokes_1 = 0
+                    strokes_2 = 0
         else:
             if(  not(overHole(ballStationary2[0], ballStationary2[1]))  ):
                 pygame.time.delay(20)
@@ -1357,37 +1462,34 @@ while True:
                 hole_seq += 1
                 print("hole seq 2")
                 player1_turn = True
+                if(h2 == 0):
+                    h2 = 1
+                    if SOUND:
+                        inHole.play()
+                    while True:  # Move ball so it looks like it goes into the hole (increase y value)
+                        pygame.time.delay(20)
+                        redrawWindow(ballStationary, ballStationary2, None, True)
+                        ballStationary2 = (ballStationary2[0], ballStationary2[1] + 1)
+                        if ballStationary2[0] > hole[0]:
+                            ballStationary2 = (ballStationary2[0] - 1, ballStationary2[1])
+                        else:
+                            ballStationary2 = (ballStationary2[0] + 1, ballStationary2[1])
 
-                if SOUND:
-                    inHole.play()
-                while True:  # Move ball so it looks like it goes into the hole (increase y value)
-                    pygame.time.delay(20)
-                    redrawWindow(ballStationary, ballStationary2, None, True)
-                    ballStationary2 = (ballStationary2[0], ballStationary2[1] + 1)
-                    if ballStationary2[0] > hole[0]:
-                        ballStationary2 = (ballStationary2[0] - 1, ballStationary2[1])
-                    else:
-                        ballStationary2 = (ballStationary2[0] + 1, ballStationary2[1])
-
-                    if ballStationary2[1] > hole[1] + 5:
-                        put = False
-                        break
+                        if ballStationary2[1] > hole[1] + 5:
+                            put = False
+                            break
 
                 # Advance to score board
-                fade()
-                displayScore(strokes, par)
-                '''
-                if strokes == 1:
-                    holeInOne()
-                else:
+                
+                if (h1 + h2 == 2):
+                #hole_seq += 1
+                    fade()
                     displayScore(strokes, par)
-                '''
-                strokes = 0
-
-
-
-
-
+                    tutorial = False
+                    strokes = 0
+                    strokes_1 = 0
+                    strokes_2 = 0
+            
       
     #Implement Shooting into the hole? Make sure this works
     
@@ -1410,15 +1512,44 @@ while True:
 
             # TO FIX GLITCH WHERE YOU GO THROUGH WALLS AND FLOORS
             if ballCords[1] > 650:
-                var = True
-                while var:
-                    fade()
-                    if strokes == 1:
-                        holeInOne()
-                    else:
-                        displayScore(strokes, par)
+                ballCords = shootPos
+                subtract = 0
+                hazard = True
+                if(player1_turn):
+                    ballStationary = ballCords
+                else:
+                    ballStationary2 = ballCords
+                time = 0
+                pos = pygame.mouse.get_pos()
+                angle = findAngle(pos)
 
-                    strokes = 0
+                if(player1_turn):
+                    line = (round(ballStationary[0] + (math.cos(angle) * 50)), round(ballStationary[1] - (math.sin(angle) * 50)))
+                else:
+                    line = (round(ballStationary2[0] + (math.cos(angle) * 50)), round(ballStationary2[1] - (math.sin(angle) * 50)))
+    
+                power = 1
+                powerAnglfe = math.pi
+                shoot = False
+                #strokes -= 1
+                if(player1_turn):
+                    strokes_1 -= 1
+                else:
+                    strokes_2 -= 1
+
+
+                #USEFUL FOR POWERUP CALL OUTS
+                label = myFont.render('Game Glitch, try again', 1, (255, 255, 255))
+                if SOUND:
+                    splash.play()
+                win.blit(label, (winwidth / 2 - label.get_width() / 2, winheight / 2 - label.get_height() / 2))
+                pygame.display.update()
+                pygame.time.delay(1500)
+                #ballColor = (255,255,255)
+                #stickyPower = False
+                #mullagain = False
+                #superPower = False
+                break
 
             # COLLISION LOOP, VERY COMPLEX,
             # - All angles are in radians
@@ -1429,11 +1560,10 @@ while True:
                     if i[5]:
                         if(tutorial == False or tut_seq > 1 ):
                             if ballCords[0] < i[0] + i[2] and ballCords[0] > i[0] and ballCords[1] > i[1] and ballCords[1] < i[1] + i[3]:
+                                print("Level: ", level)
                                 courses.coinHit(level - 1)
                                 coins += 1
                                 print("HIT COIN")
-                                text = parFont.render('Sticky Power', 1, (64,64,64))
-                                win.blit(text, (50,100))
                                 if(player1_turn):
                                     tut_seq = 3
                                     powerUpPlayer1 = True
@@ -1497,6 +1627,7 @@ while True:
                         shoot = False
                         strokes += 1
 
+                        #USEFUL FOR POWERUP CALL OUTS
                         label = myFont.render('Water Hazard, +1 stroke', 1, (255, 255, 255))
                         if SOUND:
                             splash.play()
@@ -1698,11 +1829,8 @@ while True:
                         while True:
                             subtract += 1
                             if ballCords[1] + subtract > i[1] + i[3] + 8:
-                                
                                 ballCords = (ballCords[0], ballCords[1] + subtract)
                                 break
-
-
                         if i[4] == 'sticky' or stickyPower:
                             subtract = 0
                             while True:
@@ -1810,30 +1938,7 @@ while True:
                 strokes = 0
                 strokes_1 = 0
                 strokes_2 = 0
-               # break
-        
-                '''if strokes == 1:
-                    holeInOne()
-                else:
-                    displayScore(strokes, par)
-                #hole_seq += 1
-                strokes = 0
-                strokes_1 = 0
-                strokes_2 = 0'''
-            
-                
-
-                #if()
-
                
-                '''if strokes == 1:
-                    holeInOne()
-                else:
-                    displayScore(strokes, par)
-
-                strokes = 0
-                strokes_1 = 0
-                strokes_2 = 0'''
            
             
 
