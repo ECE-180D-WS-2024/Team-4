@@ -1,2 +1,2 @@
 score 0
-coins 10
+coins 0
